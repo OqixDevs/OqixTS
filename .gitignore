@@ -195,3 +195,7 @@ dist
 
 # SvelteKit build / generate output
 .svelte-kit
+
+# Bot specific
+.env
+config.json
