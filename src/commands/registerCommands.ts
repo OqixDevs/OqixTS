@@ -16,19 +16,23 @@ export default () => {
         new SlashCommandBuilder()
             .setName('sum')
             .setDescription('Gives sum of two number')
-            .addStringOption(option =>
-                option.setName('firstnumber')
+            .addStringOption((option) =>
+                option
+                    .setName('firstnumber')
                     .setDescription('First number')
                     .setRequired(true)
             )
-            .addStringOption(option =>
-                option.setName('secondnumber')
+            .addStringOption((option) =>
+                option
+                    .setName('secondnumber')
                     .setDescription('Second number')
                     .setRequired(true)
             ),
-
-    ]
-        .map(command => command.toJSON())
+    ].map((command) => command.toJSON());
     const rest = new REST({ version: '9' }).setToken(token);
-    rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands }).then(() => console.log('Commands registered successfully')).catch(console.error)
-}
+    rest.put(Routes.applicationGuildCommands(clientId, guildId), {
+        body: commands,
+    })
+        .then(() => console.log('Commands registered successfully'))
+        .catch(console.error);
+};
