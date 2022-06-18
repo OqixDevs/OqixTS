@@ -1,5 +1,5 @@
 import { Client } from "discord.js"
-import sum from "../commands/sum";
+import sum from "../commands";
 /**
  * Listens for interaction events and calls the appropriate function.
  * @param client The Discord client.
