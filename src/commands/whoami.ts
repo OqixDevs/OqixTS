@@ -5,7 +5,6 @@ export const data = new SlashCommandBuilder()
     .setName('whoami')
     .setDescription('Display info about yourself.');
 
-//TODO: add user attributes from database (name, surname, specialisation, date of verification)
 export async function execute(interaction: CommandInteraction) {
     const member = interaction.member as GuildMember;
 
