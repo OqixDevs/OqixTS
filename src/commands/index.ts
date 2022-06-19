@@ -1,5 +1,2 @@
-/**
- * Contains all registered commands and function which can be used while running commands.
- */
-export { default as registerCommands } from './registerCommands';
-export { default as sum } from './sum';
+export * as hello from "./hello"
+export * as sum from "./sum"

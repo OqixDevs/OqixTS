@@ -1,6 +1,6 @@
 import { Client } from 'discord.js';
 import { interactionListener } from './listeners';
-import { registerCommands } from './commands';
+import { default as registerCommands } from './registerCommands';
 import dotenv from 'dotenv';
 /**
  * Main function which is called when the bot is started.
@@ -11,7 +11,7 @@ export default () => {
     const token = process.env.DISCORD_TOKEN; // add your token here
     console.log('Bot is starting...');
     const client = new Client({
-        intents: [],
+        intents: ["GUILDS"],
     });
     client.login(token);
     client.once('ready', () => {

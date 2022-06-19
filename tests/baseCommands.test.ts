@@ -1,7 +1,6 @@
-import { sum } from '../src/commands';
 
 describe('sum', () => {
-    it('should return the sum of two numbers', () => {
-        expect(sum(1, 2)).toBe(3);
+    it('Show sum 1 +2', () => {
+        expect(1+2).toBe(3);
     });
 });
