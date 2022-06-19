@@ -196,6 +196,9 @@ dist
 # SvelteKit build / generate output
 .svelte-kit
 
+# VisualStudio Code
+.vscode/
+
 # Bot specific
 .env
 config.json
