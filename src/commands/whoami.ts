@@ -1,6 +1,9 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { CommandInteraction, GuildMember } from 'discord.js';
 
+/**
+ * Returns available information about yourself.
+ */
 export const data = new SlashCommandBuilder()
     .setName('whoami')
     .setDescription('Display info about yourself.');
