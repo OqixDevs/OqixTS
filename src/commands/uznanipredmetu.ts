@@ -5,7 +5,7 @@ import { CommandInteraction } from 'discord.js';
  * Tells user if he gets credits from FIT course at FI.
  */
 export const data = new SlashCommandBuilder()
-    .setName('fitrecognize')
+    .setName('uznanipredmetu')
     .setDescription(
         'Tells how many credits you get if you recoginze FIT VUT course at FI MUNI.'
     )
