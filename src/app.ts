@@ -11,7 +11,7 @@ export default () => {
     const token = process.env.DISCORD_TOKEN; // add your token here
     console.log('Bot is starting...');
     const client = new Client({
-        intents: ["GUILDS"],
+        intents: ['GUILDS', 'GUILD_MESSAGES'],
     });
     client.login(token);
     client.once('ready', () => {
