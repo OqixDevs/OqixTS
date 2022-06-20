@@ -1,4 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
+import { PermissionFlagsBits } from 'discord-api-types/v9';
 import { CommandInteraction } from 'discord.js';
 
 /**
@@ -7,6 +8,7 @@ import { CommandInteraction } from 'discord.js';
 export const data = new SlashCommandBuilder()
     .setName('whois')
     .setDescription('Display info about user.')
+    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .addUserOption((option) =>
         option
             .setName('user')
@@ -14,7 +16,6 @@ export const data = new SlashCommandBuilder()
             .setRequired(true)
     );
 
-//TODO: Permission: only admin
 export async function execute(interaction: CommandInteraction) {
     const user = interaction.options.getUser('user');
 

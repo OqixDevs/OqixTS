@@ -1,5 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { CommandInteraction } from 'discord.js';
+import { PermissionFlagsBits } from 'discord-api-types/v9';
 
 /**
  * Prunes messages in channel.
@@ -7,6 +8,7 @@ import { CommandInteraction } from 'discord.js';
 export const data = new SlashCommandBuilder()
     .setName('prune')
     .setDescription('Prune messages')
+    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .addIntegerOption((option) =>
         option
             .setName('amount')
@@ -14,11 +16,10 @@ export const data = new SlashCommandBuilder()
             .setRequired(true)
     );
 
-//TODO: Only for admin
 export async function execute(interaction: CommandInteraction) {
     const amount = interaction.options.getInteger('amount');
 
-    if (amount == null || interaction == null) {
+    if (!amount || !interaction) {
         return interaction.reply({
             content:
                 'There was an error trying to export data from your command.',
@@ -37,9 +38,13 @@ export async function execute(interaction: CommandInteraction) {
         interaction.channel?.type === 'GUILD_TEXT' ||
         interaction.channel?.type === 'GUILD_NEWS'
     ) {
-        //TODO: Works but tells that bot is not responding.
         await interaction.channel
             ?.bulkDelete(amount)
+            .then((messages) =>
+                interaction.reply({
+                    content: `Deleted ${messages.size} messages.`,
+                })
+            )
             .catch((error: unknown) => {
                 console.error(error);
                 interaction.reply({
