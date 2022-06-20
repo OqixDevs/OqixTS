@@ -37,11 +37,7 @@ export async function execute(interaction: CommandInteraction) {
         'fitvuttotalsemesters'
     );
 
-    if (
-        fiCourseCredits == null ||
-        fitTotalCredits == null ||
-        fitTotalSemesters == null
-    ) {
+    if (!fiCourseCredits || !fitTotalCredits || !fitTotalSemesters) {
         return interaction.reply({
             content: 'You need to input a positive integer.',
             ephemeral: true,
