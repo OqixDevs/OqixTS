@@ -8,7 +8,7 @@ import { CommandInteraction } from 'discord.js';
 export const data = new SlashCommandBuilder()
     .setName('whois')
     .setDescription('Display info about user.')
-    .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
+    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .addUserOption((option) =>
         option
             .setName('user')

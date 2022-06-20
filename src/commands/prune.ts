@@ -8,7 +8,7 @@ import { PermissionFlagsBits } from 'discord-api-types/v9';
 export const data = new SlashCommandBuilder()
     .setName('prune')
     .setDescription('Prune messages')
-    .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
+    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .addIntegerOption((option) =>
         option
             .setName('amount')

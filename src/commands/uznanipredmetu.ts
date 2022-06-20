@@ -9,19 +9,19 @@ export const data = new SlashCommandBuilder()
     .setDescription(
         'Tells how many credits you get if you recoginze FIT VUT course at FI MUNI.'
     )
-    .addNumberOption((option) =>
+    .addIntegerOption((option) =>
         option
             .setName('fimunicoursecredits')
             .setDescription('Number of credits of FI MUNI course.')
             .setRequired(true)
     )
-    .addNumberOption((option) =>
+    .addIntegerOption((option) =>
         option
             .setName('fitvuttotalcredits')
             .setDescription('Total credits you got from bachelor studies.')
             .setRequired(true)
     )
-    .addNumberOption((option) =>
+    .addIntegerOption((option) =>
         option
             .setName('fitvuttotalsemesters')
             .setDescription('Number of semester you studied bachelors at FIT.')
@@ -29,11 +29,12 @@ export const data = new SlashCommandBuilder()
     );
 
 export async function execute(interaction: CommandInteraction) {
-    const fiCourseCredits = interaction.options.getNumber(
+    const fiCourseCredits = interaction.options.getInteger(
         'fimunicoursecredits'
     );
-    const fitTotalCredits = interaction.options.getNumber('fitvuttotalcredits');
-    const fitTotalSemesters = interaction.options.getNumber(
+    const fitTotalCredits =
+        interaction.options.getInteger('fitvuttotalcredits');
+    const fitTotalSemesters = interaction.options.getInteger(
         'fitvuttotalsemesters'
     );
 
@@ -44,6 +45,12 @@ export async function execute(interaction: CommandInteraction) {
         });
     }
 
+    if (fiCourseCredits < 0 || fitTotalCredits < 0 || fitTotalSemesters < 0) {
+        return interaction.reply({
+            content: 'You need to provide positive values.',
+            ephemeral: true,
+        });
+    }
     const neededCredits = 30 * fitTotalSemesters;
     let availableCredits = fitTotalCredits - neededCredits;
     availableCredits < 0 ? (availableCredits = 0) : availableCredits;
