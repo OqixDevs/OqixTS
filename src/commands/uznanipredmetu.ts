@@ -63,6 +63,8 @@ export async function execute(interaction: CommandInteraction) {
     expect > fiCourseCredits ? (expect = fiCourseCredits) : expect;
 
     return interaction.reply(
-        `You've studied ${fitTotalSemesters} semesters at FIT, therefore you need more than ${neededCredits}cr to recognize any course WITH credits. You've finished bachelors with ${fitTotalCredits}cr so you have available total of ${availableCredits}cr to use from bachelors. Expect to receive ${expect}cr if you recognize that FIT course at FI with value of ${fiCourseCredits}cr, but better ask at studies department.`
+        `You have studied ${fitTotalSemesters} semesters at FIT. To have a subject recognised WITH credits, you need to have finished FIT with extra credits above ${neededCredits}cr.\n\n` +
+            `You have finished bachelors with ${fitTotalCredits}cr so you have a total of ${availableCredits}cr available.\n\n` +
+            `The subject you want to have recognised has ${fiCourseCredits}cr value. Because of your extra credits from bachelors, you can expect to having it recognised for ${expect}cr. But better ask at studies department.`
     );
 }
