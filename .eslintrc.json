@@ -14,13 +14,6 @@
                 "after": true
             }
         ],
-        "brace-style": [
-            "error",
-            "stroustrup",
-            {
-                "allowSingleLine": true
-            }
-        ],
         "comma-dangle": [
             "error",
             "always-multiline"
