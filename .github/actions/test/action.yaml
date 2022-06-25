@@ -1,0 +1,8 @@
+name: Test
+description: Tests nodejs project
+runs:
+  using: "composite"
+  steps:
+    - name: Test
+      shell: bash
+      run: npm test

@@ -1,0 +1,11 @@
+name: Lint project
+description: Test if linting is followed
+runs:
+  using: "composite"
+  steps:
+    - name: Lint using eslint
+      shell: bash
+      run: npm run lint
+    - name: Lint using prettier
+      shell: bash
+      run: npm run prettier-check
