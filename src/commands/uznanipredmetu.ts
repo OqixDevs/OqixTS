@@ -53,18 +53,17 @@ export async function execute(interaction: CommandInteraction) {
     }
     const neededCredits = 30 * fitTotalSemesters;
     let availableCredits = fitTotalCredits - neededCredits;
-    availableCredits < 0 ? (availableCredits = 0) : availableCredits;
+    availableCredits <= 0 ? (availableCredits = 0) : availableCredits;
 
     let expect = 0;
-    availableCredits < fiCourseCredits
+    availableCredits <= fiCourseCredits
         ? (expect = availableCredits)
-        : (expect = availableCredits - fiCourseCredits);
+        : (expect = fiCourseCredits);
     expect < 0 ? (expect = 0) : expect;
-    expect > fiCourseCredits ? (expect = fiCourseCredits) : expect;
 
     return interaction.reply(
-        `You have studied ${fitTotalSemesters} semesters at FIT. To have a subject recognised WITH credits, you need to have finished FIT with extra credits above ${neededCredits}cr.\n\n` +
+        `You have studied ${fitTotalSemesters} semesters at FIT. To have a course recognised WITH credits, you need to have finished FIT with extra credits above ${neededCredits}cr.\n\n` +
             `You have finished bachelors with ${fitTotalCredits}cr so you have a total of ${availableCredits}cr available.\n\n` +
-            `The subject you want to have recognised has ${fiCourseCredits}cr value. Because of your extra credits from bachelors, you can expect to having it recognised for ${expect}cr. But better ask at studies department.`
+            `The course you want to have recognised has ${fiCourseCredits}cr value. Because of your extra credits from bachelors, you can expect to having it recognised for ${expect}cr. But better ask at studies department.`
     );
 }
