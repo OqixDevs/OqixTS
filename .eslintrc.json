@@ -30,10 +30,7 @@
             "property"
         ],
         "handle-callback-err": "off",
-        "indent": [
-            "error",
-            4
-        ],
+        "indent": "off",
         "key-spacing": [
             "error",
             {
