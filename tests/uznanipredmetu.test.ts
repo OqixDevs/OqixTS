@@ -32,7 +32,7 @@ describe('Tests for uznanipredmetu command', () => {
                 `The course you want to have recognised has ${fiMuniCourseCredits}cr value. Because of your extra credits from bachelors, you can expect to having it recognised for 5cr. But better ask at studies department.`
         );
     });
-    it('Calling exactly 180 credits', () => {
+    it('Calling 184 credits', () => {
         fitTotalCredits = 184;
         interaction.options.getInteger
             .calledWith('fimunicoursecredits')
