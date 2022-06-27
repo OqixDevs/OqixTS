@@ -5,3 +5,4 @@ export * as whois from './whois';
 export * as uznanipredmetu from './uznanipredmetu';
 export * as prune from './prune';
 export * as announce from './announce';
+export * as restart from './restart';

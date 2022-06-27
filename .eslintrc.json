@@ -14,13 +14,6 @@
                 "after": true
             }
         ],
-        "brace-style": [
-            "error",
-            "stroustrup",
-            {
-                "allowSingleLine": true
-            }
-        ],
         "comma-dangle": [
             "error",
             "always-multiline"
@@ -37,10 +30,7 @@
             "property"
         ],
         "handle-callback-err": "off",
-        "indent": [
-            "error",
-            4
-        ],
+        "indent": "off",
         "key-spacing": [
             "error",
             {

@@ -95,10 +95,11 @@
     // "allowUnreachableCode": true,                     /* Disable error reporting for unreachable code. */
     "resolveJsonModule": true,
     "pretty": false,
+    "types": ["jest", "node"],
     /* Completeness */
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
-  "include": ["src/"],
+  "include": ["src/", "tests/"],
   "compileOnSave": false,
 }
