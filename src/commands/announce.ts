@@ -33,7 +33,13 @@ export async function execute(interaction: CommandInteraction) {
         });
     }
 
-    return interaction.reply(message).catch((error: unknown) => {
+    return interaction.channel?.send(message).then(() => interaction.reply({ content: "Message sent", ephemeral: true })).catch((error: unknown) => {
+        console.error(error);
+        interaction.reply({
+            content: 'There was an error trying to announce in this channel!',
+            ephemeral: true,
+        });
+    });
         console.error(error);
         interaction.reply({
             content: 'There was an error trying to announce in this channel!',
