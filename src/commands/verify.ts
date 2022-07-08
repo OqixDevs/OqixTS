@@ -28,13 +28,17 @@ export const data = new SlashCommandBuilder()
     .addStringOption((option) =>
         option
             .setName('linktoconfirmationmuni')
-            .setDescription('Link to confirmation of studies on MUNI')
+            .setDescription(
+                'Link to confirmation in E-výpisy (example URL: https://is.muni.cz/confirmation-of-studies/cyweo31r)'
+            )
             .setRequired(true)
     )
     .addStringOption((option) =>
         option
             .setName('bachelorthesislink')
-            .setDescription('Link to the bachelor thesis in Dspace')
+            .setDescription(
+                'Thesis link at Dspace (example URL: https://dspace.vutbr.cz/handle/11012/478521)'
+            )
             .setRequired(true)
     );
 
@@ -58,7 +62,8 @@ export async function execute(interaction: CommandInteraction) {
     const authorName = await scrapeThesis(bachelorThesisParsedUrl.pathname);
     if (!authorName) {
         return interaction.reply({
-            content: 'Could not get the author name.',
+            content:
+                'Could not get the author name. Maybe thesis URL is wrong?',
             ephemeral: true,
         });
     }
@@ -68,7 +73,7 @@ export async function execute(interaction: CommandInteraction) {
     if (!scrapedConfirmationStudy) {
         return interaction.reply({
             content:
-                'Could not get infromation from the confirmation of studies.',
+                'Could not get infromation from the confirmation of studies. Maybe confirmation of studies URL is wrong?',
             ephemeral: true,
         });
     }
