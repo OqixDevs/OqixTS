@@ -5,9 +5,15 @@ import { load } from 'cheerio';
  * Scrapes the confirmation studies from the given path.
  */
 export async function scrapeConfirmationStudies(pathname: string) {
-    const response = await axios.get(
-        'https://is.muni.cz' + pathname + '?lang=en'
-    );
+    let response;
+    try {
+        response = await axios.get(
+            'https://is.muni.cz' + pathname + '?lang=en'
+        );
+    } catch (e) {
+        console.debug(e);
+        return null;
+    }
     const $ = load(response.data);
     const userInfo = $(
         '#el_potvrzeni > div.column.small-12.medium-9.large-9 > div'
