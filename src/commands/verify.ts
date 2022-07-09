@@ -104,7 +104,7 @@ export async function execute(interaction: CommandInteraction) {
         return interaction.reply({
             content:
                 'You have been successfully verified with role ' +
-                roleProgramm +
+                roleProgramm.name +
                 '.',
             ephemeral: true,
         });

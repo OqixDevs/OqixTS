@@ -67,8 +67,8 @@ export async function assignRole(
             });
             fs.writeFileSync('./userLog.json', JSON.stringify(userLogJSON));
             if (roleVerified && roleProgramm) {
-                await member.roles.add(roleVerified);
-                await member.roles.add(roleProgramm);
+                member.roles.add(roleVerified);
+                member.roles.add(roleProgramm);
                 return roleProgramm;
             }
         }
