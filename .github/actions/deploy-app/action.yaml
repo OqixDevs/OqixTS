@@ -1,0 +1,26 @@
+name: Build image and push it to dockerhub
+description: Builds image and pushes it to dockerhub
+runs:
+  using: "composite"
+  steps:
+    - name: Connect to VM and start app
+      env:
+        ADDRESS_VM: ${{inputs.ADDRESS_VM}}
+        DOCKER_USERNAME: ${{ inputs.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ inputs.DOCKER_PASSWORD }}
+        DISCORD_TOKEN: ${{ inputs.DISCORD_TOKEN }}
+        CLIENT_ID: ${{ inputs.CLIENT_ID }}
+        GUILD_ID: ${{ inputs.GUILD_ID }}
+        SSH_KEY: ${{ inputs.SSH_KEY }}
+        KNOWN_HOSTS: ${{ inputs.KNOWN_HOSTS }}
+      shell: bash
+      run: |
+        echo "Log in to docker..."
+        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        echo "Prepare ssh setup..."
+        echo "$SSH_KEY" > ~/vm_key.key
+        chmod 400 ~/vm_key.key
+        mkdir ~/.ssh
+        echo $KNOWN_HOSTS >> ~/.ssh/known_hosts
+        echo "Connect to VM and start app..."
+        ssh -i ~/vm_key.key $ADDRESS_VM "cd /app && docker pull mimotej/test:$GITHUB_SHA &&" 'docker kill $(sudo docker ps -a -q);' "docker run -d -e DISCORD_TOKEN=$DISCORD_TOKEN -e CLIENT_ID=$CLIENT_ID -e GUILD_ID=$GUILD_ID -it --mount type=bind,source=/app/userLog.json,target=/root/userLog.json mimotej/test:$GITHUB_SHA"
