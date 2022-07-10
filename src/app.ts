@@ -16,6 +16,8 @@ export default () => {
     client.login(token);
     client.once('ready', () => {
         registerCommands();
+        client.user?.setActivity(`/verify`, { type: 2 });
     });
+
     interactionListener(client);
 };
