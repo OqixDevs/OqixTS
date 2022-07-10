@@ -202,3 +202,4 @@ dist
 # Bot specific
 .env
 config.json
+userLog.json

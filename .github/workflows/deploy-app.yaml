@@ -1,0 +1,52 @@
+name: Deploy app to cloud
+
+on:
+  push:
+    tags:
+      - '*'
+jobs:
+  pre-run:
+    name: '⚙ Running pre-deploy checks'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install dependencies
+        uses: ./.github/actions/build
+      - name: Test
+        uses: ./.github/actions/test
+      - name: Install dependencies
+        uses: ./.github/actions/build
+      - name: Lint project
+        uses: ./.github/actions/lint
+  setup-image:
+    name: "🏗 Build image and push it to dockerhub"
+    runs-on: ubuntu-latest
+    needs: pre-run
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Prepare image
+        uses: ./.github/actions/prepare-image
+        with:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+  deploy-app:
+    name: '🚀 Deploy app to Oracle OCI'
+    runs-on: ubuntu-latest
+    needs: setup-image
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Deploy app
+        uses: ./.github/actions/deploy-app
+        with:
+          ADDRESS_VM: ${{ secrets.ADDRESS_VM }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          GUILD_ID: ${{ secrets.GUILD_ID }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}

@@ -1,0 +1,23 @@
+name: Build image and push it to dockerhub
+description: Builds image and pushes it to dockerhub
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+      with:
+        ref: add-logging
+    - name: docker login
+      env:
+        DOCKER_USERNAME: ${{ inputs.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ inputs.DOCKER_PASSWORD }}
+      shell: bash
+      run: |
+        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+    - name: Build image
+      shell: bash
+      run: |
+        docker build -t mimotej/oqix:$GITHUB_SHA -t mimotej/oqix:latest .
+    - name: Push image to dockerhub
+      shell: bash
+      run: |
+        docker push mimotej/oqix --all-tags
