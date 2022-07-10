@@ -23,7 +23,7 @@ export async function assignRole(
     interaction: CommandInteraction,
     scrapedConfirmationStudy: Dictionary<string>,
     authorName: string,
-    idConfirmationMuniParsedUrl: URL
+    bachelorThesisParsedUrl: URL
 ) {
     let userLog = undefined;
     try {
@@ -61,8 +61,7 @@ export async function assignRole(
             const member = interaction.member as GuildMember;
             userLogJSON.push({
                 id: interaction.user.id,
-                idConfirmationMuni:
-                    idConfirmationMuniParsedUrl.pathname.split('/')[2],
+                idThesis: bachelorThesisParsedUrl.pathname.split('/')[3],
                 status: 'verified',
             });
             fs.writeFileSync('./userLog.json', JSON.stringify(userLogJSON));

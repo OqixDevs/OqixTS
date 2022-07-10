@@ -49,28 +49,22 @@ export async function execute(interaction: CommandInteraction) {
         });
     }
     const bachelorThesisParsedUrl = new URL(sanitizeUrl(bachelorThesis));
-
     const idConfirmationMuniParsedUrl = new URL(
         sanitizeUrl(idConfirmationMuni)
     );
     for (const key in userLogJSON) {
-        if (
-            userLogJSON[key].idConfirmationMuni ===
-                idConfirmationMuniParsedUrl.pathname.split('/')[2] &&
-            interaction.user.id === userLogJSON[key].id
-        ) {
+        if (interaction.user.id === userLogJSON[key].id) {
             return interaction.reply({
                 content:
                     'User already verified! Contact admin if you need to verify again.',
                 ephemeral: true,
             });
         } else if (
-            userLogJSON[key].idConfirmationMuni ===
-            idConfirmationMuniParsedUrl.pathname.split('/')[2]
+            userLogJSON[key].idThesis ===
+            bachelorThesisParsedUrl.pathname.split('/')[3]
         ) {
             return interaction.reply({
-                content:
-                    'This confirmation of studies is already used! please use different one.',
+                content: 'This thesis is already used! Please contact admin.',
                 ephemeral: true,
             });
         }
@@ -98,7 +92,7 @@ export async function execute(interaction: CommandInteraction) {
         interaction,
         scrapedConfirmationStudy,
         authorName,
-        idConfirmationMuniParsedUrl
+        bachelorThesisParsedUrl
     );
     if (roleProgramm) {
         return interaction.reply({

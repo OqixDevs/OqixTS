@@ -16,8 +16,8 @@ runs:
     - name: Build image
       shell: bash
       run: |
-        docker build -t mimotej/test:$GITHUB_SHA -t mimotej/test:latest .
+        docker build -t mimotej/oqix:$GITHUB_SHA -t mimotej/oqix:latest .
     - name: Push image to dockerhub
       shell: bash
       run: |
-        docker push mimotej/test --all-tags
+        docker push mimotej/oqix --all-tags

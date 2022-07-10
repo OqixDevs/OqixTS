@@ -218,7 +218,92 @@ describe('Tests for verify command', () => {
         const userLogJSON = JSON.parse(userLog);
         userLogJSON.push({
             id: '123',
-            idConfirmationMuni: 'cccxxd3',
+            idThesis: '222321',
+            status: 'verified',
+        });
+        fs.writeFileSync('./userLog.json', JSON.stringify(userLogJSON));
+        interaction.options.getString
+            .calledWith('linktoconfirmationmuni')
+            .mockReturnValue(
+                'https://is.muni.cz/confirmation-of-studies/cccxxd3?lang=en'
+            );
+        interaction.options.getString
+            .calledWith('bachelorthesislink')
+            .mockReturnValue('https://dspace.vutbr.cz/handle/11012/2223121');
+        jest.spyOn(utils, 'scrapeThesis').mockReturnValue(
+            Promise.resolve(nameUser)
+        );
+        jest.spyOn(utils, 'scrapeConfirmationStudies').mockReturnValue(
+            Promise.resolve(dict)
+        );
+        if (interaction.guild) {
+            interaction.guild.roles.cache.find.mockReturnValue(
+                'test' as unknown as Role
+            );
+        }
+        await verify.execute(interaction);
+        expect(interaction.reply).toHaveBeenCalledWith({
+            content:
+                'User already verified! Contact admin if you need to verify again.',
+            ephemeral: true,
+        });
+    });
+
+    it('User is using thesis which is assigned to different user', async () => {
+        interaction.user.id = '123';
+        let userLog = undefined;
+        try {
+            userLog = fs.readFileSync('./userLog.json', 'utf8');
+        } catch (e) {
+            fs.writeFileSync('./userLog.json', '[]');
+            userLog = fs.readFileSync('./userLog.json', 'utf8');
+        }
+        const userLogJSON = JSON.parse(userLog);
+        userLogJSON.push({
+            id: '1234',
+            idThesis: '2223121',
+            status: 'verified',
+        });
+        fs.writeFileSync('./userLog.json', JSON.stringify(userLogJSON));
+        interaction.options.getString
+            .calledWith('linktoconfirmationmuni')
+            .mockReturnValue(
+                'https://is.muni.cz/confirmation-of-studies/cccxxd3?lang=en'
+            );
+        interaction.options.getString
+            .calledWith('bachelorthesislink')
+            .mockReturnValue('https://dspace.vutbr.cz/handle/11012/2223121');
+        jest.spyOn(utils, 'scrapeThesis').mockReturnValue(
+            Promise.resolve(nameUser)
+        );
+        jest.spyOn(utils, 'scrapeConfirmationStudies').mockReturnValue(
+            Promise.resolve(dict)
+        );
+        if (interaction.guild) {
+            interaction.guild.roles.cache.find.mockReturnValue(
+                'test' as unknown as Role
+            );
+        }
+        await verify.execute(interaction);
+        expect(interaction.reply).toHaveBeenCalledWith({
+            content: 'This thesis is already used! Please contact admin.',
+            ephemeral: true,
+        });
+    });
+
+    it('Both thesis and user is already verified', async () => {
+        interaction.user.id = '123';
+        let userLog = undefined;
+        try {
+            userLog = fs.readFileSync('./userLog.json', 'utf8');
+        } catch (e) {
+            fs.writeFileSync('./userLog.json', '[]');
+            userLog = fs.readFileSync('./userLog.json', 'utf8');
+        }
+        const userLogJSON = JSON.parse(userLog);
+        userLogJSON.push({
+            id: '123',
+            idThesis: '2223121',
             status: 'verified',
         });
         fs.writeFileSync('./userLog.json', JSON.stringify(userLogJSON));
