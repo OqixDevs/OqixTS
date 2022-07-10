@@ -4,8 +4,6 @@ runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v3
-      with:
-        ref: add-logging
     - name: docker login
       env:
         DOCKER_USERNAME: ${{ inputs.DOCKER_USERNAME }}
