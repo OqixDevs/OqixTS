@@ -1,17 +1,17 @@
 <h3 align="center">OqixTS</h3>
 <p align="center">Discord BOT intended for FIT@FI server.</p>
 <p align="center">
-  <a href="https://github.com/xvanick1/OqixTS/actions?query=workflow%3A%22Pull+request+workflow%22++">
-    <img alt="Build Status" src="https://img.shields.io/github/workflow/status/xvanick1/OqixTS/Pull%20request%20workflow">
+  <a href="https://github.com/OqixDevs/OqixTS/actions?query=workflow%3A%22Pull+request+workflow%22++">
+    <img alt="Build Status" src="https://img.shields.io/github/workflow/status/OqixDevs/OqixTS/Pull%20request%20workflow">
   </a>
-  <a href="https://github.com/xvanick1/OqixTS">
-    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/xvanick1/OqixTS">
+  <a href="https://github.com/OqixDevs/OqixTS">
+    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/OqixDevs/OqixTS">
   </a>
-<a href="https://github.com/xvanick1/OqixTS/tags">
-    <img alt="Latest GitHub tag" src="https://img.shields.io/github/v/tag/xvanick1/OqixTS">
+<a href="https://github.com/OqixDevs/OqixTS/tags">
+    <img alt="Latest GitHub tag" src="https://img.shields.io/github/v/tag/OqixDevs/OqixTS">
   </a>
-<a href="https://github.com/xvanick1/OqixTS/blob/master/LICENSE">
-    <img alt="Latest GitHub tag" src="https://img.shields.io/github/license/xvanick1/OqixTS">
+<a href="https://github.com/OqixDevs/OqixTS/blob/master/LICENSE">
+    <img alt="Latest GitHub tag" src="https://img.shields.io/github/license/OqixDevs/OqixTS">
   </a>
 </p>
 
