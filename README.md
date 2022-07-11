@@ -1,4 +1,9 @@
-<h3 align="center">OqixTS</h3>
+<p align="center">
+  <a href="https://github.com/OqixDevs/OqixTS">
+    <img src="https://raw.githubusercontent.com/OqixDevs/OqixTS/master/avatar/oqix-hq.png" width="200" alt="Oqix logo" />
+  </a>
+</p>
+<h2 align="center">OqixTS</h2>
 <p align="center">Discord BOT intended for FIT@FI server.</p>
 <p align="center">
   <a href="https://github.com/OqixDevs/OqixTS/actions?query=workflow%3A%22Pull+request+workflow%22++">
