@@ -35,7 +35,7 @@ OqixTS is a bot used in FIT@FI discord. This bot has following functionalinty:
 
 ## :desktop_computer: Development setup
 This app uses NodeJS to setup dev environment use [npm](https://www.npmjs.com/) and run following command:
-```shell
+```she bll
 npm i
 ```
 
