@@ -1,0 +1,25 @@
+name: React on lgtm in PR
+
+on:
+  issue_comment:
+    types: [created]
+jobs:
+  lgtm-pr:
+    if: (github.event.issue.pull_request &&  contains(github.event.comment.body, '/lgtm'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Verifies permissions
+        uses: ./.github/actions/validate-user
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Remove review-needed label
+        uses: actions-ecosystem/action-remove-labels@v1
+        with:
+          labels: review-needed
+      - name: Add review-needed label
+        uses: actions-ecosystem/action-add-labels@v1
+        with:
+          labels: lgtm
