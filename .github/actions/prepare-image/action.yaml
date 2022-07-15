@@ -14,7 +14,8 @@ runs:
     - name: Build image
       shell: bash
       run: |
-        docker build -t mimotej/oqix:$GITHUB_SHA -t mimotej/oqix:latest .
+        docker buildx create --name oqixBuilder --use
+        docker buildx build --platform linux/arm64 -t mimotej/oqix:$GITHUB_SHA -t mimotej/oqix:latest .
     - name: Push image to dockerhub
       shell: bash
       run: |
