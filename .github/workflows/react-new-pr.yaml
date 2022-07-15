@@ -4,27 +4,24 @@ on:
     types: [opened]
 
 jobs:
-  triage:
-    permissions:
-      contents: read
-      pull-requests: write
+  new-pr:
     runs-on: ubuntu-latest
     steps:
-    - name: "Comment to PR and add labels"
-      with:
-        repo-token: "${{ secrets.GITHUB_TOKEN }}"
-        script: |
-          var comment = "Hello 👋, thank you for opening new PR to OqixTS 💗\n\n" +
-                        "Please, wait till somebody will review your PR.\n" +
-          github.issues.createComment({
-            owner: github.context.repo.owner,
-            repo: github.context.repo.repo,
-            issue_number: github.context.issue.number,
-            body: comment
-          })
-          github.issues.addLabels({
-            owner: github.context.repo.owner,
-            repo: github.context.repo.repo,
-            issue_number: github.context.issue.number,
-            labels: ["review-needed"]
-          })
+      - name: "Comment to PR and add labels"
+      - uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            var comment = "Hello 👋, thank you for opening new PR to OqixTS 💗\n\n Please, wait till somebody will review your PR.\n"
+            github.issues.createComment({
+              owner: github.context.repo.owner,
+              repo: github.context.repo.repo,
+              issue_number: github.context.issue.number,
+              body: comment
+            })
+            github.issues.addLabels({
+              owner: github.context.repo.owner,
+              repo: github.context.repo.repo,
+              issue_number: github.context.issue.number,
+              labels: ["review-needed"]
+            })

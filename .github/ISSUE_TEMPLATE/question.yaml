@@ -6,6 +6,6 @@ body:
     id: question
     attributes:
       description: "Please add your question"
-      label: question
+      label: Question
     validations:
       required: true

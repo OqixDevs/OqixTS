@@ -7,11 +7,11 @@ body:
     id: description
     attributes:
       description: "Please add information about your new feature"
-      label: description-feature
+      label: Description of the feature
     validations:
       required: true
   - type: textarea
     id: links
     attributes:
       description: "Please add related links if any"
-      label: links-feature
+      label: Related links
