@@ -7,7 +7,7 @@ body:
     id: severity
     attributes:
       description: "Please select severity of the bug"
-      label: severity-bug
+      label: Bug severity
       options:
         - critical
         - major
@@ -19,6 +19,6 @@ body:
     id: description
     attributes:
       description: "Please add information about your bug"
-      label: description-bug
+      label: Bug description
     validations:
       required: true
