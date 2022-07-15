@@ -1,0 +1,30 @@
+name: Validate user
+description: Check if user is maintainer of the repo
+runs:
+  using: composite
+  steps:
+      - name: Check if user has write access
+        uses: lannonbr/repo-permission-check-action@2.0.2
+        continue-on-error: true
+        id: access
+        with:
+          permission: write
+        env:
+          GITHUB_TOKEN: ${{ inputs.token }}
+      - name: Inform user when he is not allowed
+        uses: actions/github-script@v3
+        if: ${{ !steps.access.outcome == 'failure' }}
+        with:
+          github-token: ${{inputs.GITHUB_TOKEN}}
+          script: |
+                var comment = "You are not allowed to use this command 🛑"
+                github.issues.createComment({
+                  issue_number: ${{ github.event.number }},
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: comment
+                })
+      - name: exit if user is not allowed
+        if: ${{ !steps.access.outcome == 'failure' }}
+        shell: bash
+        run: exit 1
