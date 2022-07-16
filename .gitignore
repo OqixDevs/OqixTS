@@ -203,3 +203,5 @@ dist
 .env
 config.json
 userLog.json
+
+pnpm-lock.yaml
