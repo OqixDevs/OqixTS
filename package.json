@@ -13,20 +13,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xvanick1/OqixTS.git"
+    "url": "git+https://github.com/OqixDevs/OqixTS.git"
   },
   "keywords": [
     "oqix",
     "oqixts",
     "oqixjs",
+    "oqixdevs",
     "fit@fi"
   ],
-  "author": "FIT@FI Community",
+  "author": "OqixDevs",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/xvanick1/OqixTS/issues"
+    "url": "https://github.com/OqixDevs/OqixTS/issues"
   },
-  "homepage": "https://github.com/xvanick1/OqixTS#readme",
+  "homepage": "https://github.com/OqixDevs/OqixTS#readme",
   "dependencies": {
     "@discordjs/builders": "^0.15.0",
     "@discordjs/rest": "^0.5.0",
