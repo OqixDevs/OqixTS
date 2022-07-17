@@ -7,3 +7,4 @@ export * as prune from './prune';
 export * as announce from './announce';
 export * as restart from './restart';
 export * as verify from './verify';
+export * as config from './config';
