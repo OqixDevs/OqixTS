@@ -1,4 +1,7 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
+import {
+    SlashCommandBuilder,
+    SlashCommandSubcommandsOnlyBuilder,
+} from '@discordjs/builders';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
 import * as commandModules from './commands';
@@ -7,7 +10,9 @@ import * as commandModules from './commands';
  * Registers all commands.
  */
 type Command = {
-    data: Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>;
+    data:
+        | Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>
+        | SlashCommandSubcommandsOnlyBuilder;
 };
 export default () => {
     const commands = [];
