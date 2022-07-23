@@ -4,5 +4,6 @@
     "config:base",
     "group:all"
   ],
+  "ignorePaths": ["**/.github/**"],
   "ignoreDeps": ["@discordjs/rest", "@discordjs/builders", "discord.js", "discord-api-types"]
 }

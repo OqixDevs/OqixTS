@@ -12,7 +12,7 @@ runs:
         env:
           GITHUB_TOKEN: ${{ inputs.token }}
       - name: Inform user when he is not allowed
-        uses: actions/github-script@v6
+        uses: actions/github-script@v3
         if: ${{ !steps.access.outcome == 'failure' }}
         with:
           github-token: ${{inputs.GITHUB_TOKEN}}
