@@ -4,8 +4,7 @@ import {
     PermissionFlagsBits,
 } from 'discord-api-types/v9';
 import { CommandInteraction, GuildMember } from 'discord.js';
-import { Config, ConfigKey } from '../utils/config';
-import { Embed } from '../utils/embed';
+import { Config, ConfigKey, ConfigValue, Embed } from '../utils';
 
 class StringOption implements APIApplicationCommandOptionChoice<string> {
     value: string;
@@ -21,66 +20,106 @@ export const data = new SlashCommandBuilder()
     .setName('config')
     .setDescription('Gets or sets config values')
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-    .addStringOption((option) =>
-        option
-            .setChoices(
-                {
-                    name: 'get',
-                    value: 'get',
-                },
-                {
-                    name: 'set',
-                    value: 'set',
-                },
-                {
-                    name: 'list',
-                    value: 'list',
-                }
-            )
-            .setName('action')
-            .setDescription('Command config action')
-            .setRequired(true)
-    )
-    .addStringOption((option) =>
-        option
-            .setName('property')
-            .setDescription('Config property')
-            .setRequired(false)
-            .setChoices(
-                ...Object.getOwnPropertyNames(Config.Instance.Properties).map(
-                    (x) => new StringOption(x)
-                )
+    .addSubcommand((subcommand) =>
+        subcommand
+            .setName('get')
+            .setDescription('Get config value')
+            .addStringOption((option) =>
+                option
+                    .setName('property')
+                    .setDescription('Config property')
+                    .setRequired(true)
+                    .setChoices(
+                        ...Object.getOwnPropertyNames(
+                            Config.Instance.Properties
+                        ).map((x) => new StringOption(x))
+                    )
             )
     )
-    .addStringOption((option) =>
-        option
-            .setName('value')
-            .setDescription('New config value, if setting property')
+    .addSubcommand((subcommand) =>
+        subcommand
+            .setName('set')
+            .setDescription('Set config value')
+            .addStringOption((option) =>
+                option
+                    .setName('property')
+                    .setDescription('Config property')
+                    .setRequired(true)
+                    .setChoices(
+                        ...Object.getOwnPropertyNames(
+                            Config.Instance.Properties
+                        ).map((x) => new StringOption(x))
+                    )
+            )
+            .addStringOption((option) =>
+                option
+                    .setName('value')
+                    .setDescription(
+                        'New config property value. Array values are comma separated'
+                    )
+                    .setRequired(true)
+            )
+    )
+    .addSubcommand((subcommand) =>
+        subcommand.setName('list').setDescription('List all config values')
+    )
+    .addSubcommand((subcommand) =>
+        subcommand.setName('reload').setDescription('Fully reload config file')
     );
 
 export async function execute(interaction: CommandInteraction) {
     const member = interaction.member as GuildMember;
 
-    const action = interaction.options.getString('action');
     const property = interaction.options.getString('property');
+    const subcommand = interaction.options.getSubcommand();
 
     const embed = Embed.GetDefault(member);
 
-    if (action == 'get') {
-        const value = Config.Instance.GetProperty(property as ConfigKey);
+    if (subcommand == 'get') {
+        const value = Config.Instance.GetPropertySerialized(
+            property as ConfigKey
+        );
         embed.addField(property ?? 'None', value);
-    } else if (action == 'list') {
-        const keys = Object.keys(Config.Instance) as ConfigKey[];
+        embed.setTitle(`Config property`);
+    } else if (subcommand == 'list') {
+        const keys = Object.keys(Config.Instance.Properties) as ConfigKey[];
         for (const key of keys) {
-            embed.addField(key, Config.Instance.Properties[key], true);
+            embed.addField(
+                key,
+                Config.Instance.GetPropertySerialized(key),
+                true
+            );
         }
-    } else if (action == 'set') {
-        const newValue = interaction.options.getString('value') ?? 'None';
-        const oldValue = Config.Instance.GetProperty(property as ConfigKey);
-        Config.Instance.SetProperty(property as ConfigKey, newValue);
+        embed.setTitle(`List of config properties`);
+    } else if (subcommand == 'set') {
+        let newValueRaw = interaction.options.getString('value') ?? 'null';
+        const oldValue = Config.Instance.GetPropertySerialized(
+            property as ConfigKey
+        );
+        let newValueArray: Array<string>;
+        if (Array.isArray(Config.Instance.Properties[property as ConfigKey])) {
+            newValueArray = newValueRaw
+                .split(',')
+                .filter((x) => x)
+                .map((x) => x.trim());
+            console.log(newValueArray);
+            Config.Instance.SetProperty(
+                property as ConfigKey,
+                newValueArray as ConfigValue
+            );
+            newValueRaw = JSON.stringify(newValueArray);
+        } else {
+            Config.Instance.SetProperty(
+                property as ConfigKey,
+                newValueRaw as ConfigValue
+            );
+        }
         embed.setTitle(`Setting property ${property}`);
         embed.addField('Old value', oldValue);
-        embed.addField('New value', newValue);
+        embed.addField('New value', newValueRaw);
+    } else if (subcommand == 'reload') {
+        Config.Instance.LoadConfig();
+        embed.setTitle(`Config reloaded`);
     }
 
     interaction.reply({

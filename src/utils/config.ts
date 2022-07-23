@@ -1,10 +1,18 @@
 import * as fs from 'fs';
 
-class ConfigProperties {
+export class ConfigProperties {
     DefaultColor = '#0099ff';
+    SubjectChannelGroupIDs: Array<string> = [];
 }
 
 export type ConfigKey = keyof ConfigProperties;
+export type ConfigValue =
+    | string
+    | string[]
+    | number
+    | number[]
+    | boolean
+    | boolean[];
 
 export class Config {
     private static _instance: Config;
@@ -23,13 +31,17 @@ export class Config {
         this.LoadConfig();
     }
 
-    public SetProperty(property: ConfigKey, value: any) {
-        this.Properties[property] = value;
+    public SetProperty(property: ConfigKey, value: ConfigValue) {
+        this.Properties[property] = value as never;
         this.SaveConfig();
     }
 
-    public GetProperty(property: ConfigKey) {
-        return this.Properties[property];
+    public GetPropertySerialized(property: ConfigKey): string {
+        const value = this.Properties[property];
+        if (typeof value === 'object') {
+            return JSON.stringify(this.Properties[property]);
+        }
+        return value.toString();
     }
 
     private SaveConfig() {
@@ -47,7 +59,6 @@ export class Config {
                 this.configPath,
                 JSON.stringify(new ConfigProperties())
             );
-            console.log(`${this.configPath} does not exist, creating new file`);
             this.Properties = new ConfigProperties();
         }
     }
