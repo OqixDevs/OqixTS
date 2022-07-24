@@ -8,3 +8,4 @@ export * as announce from './announce';
 export * as restart from './restart';
 export * as verify from './verify';
 export * as config from './config';
+export * as channelmanagement from './channelAssign';
