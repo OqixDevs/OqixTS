@@ -19,6 +19,7 @@ export async function setupSubjectChannels(guild: Guild) {
                     new MessageSelectMenu()
                         .setCustomId('channelSelect-' + channelGroupId)
                         .setPlaceholder(channelGroup.name)
+                        .setMinValues(1)
                 )
             );
         }
@@ -40,6 +41,9 @@ export async function setupSubjectChannels(guild: Guild) {
                     },
                 ]);
             }
+            channelSelect.data[channelGroupIndex].components[0].setMaxValues(
+                Math.min(categoryChannels.size, 25) // 25 is Discord API max
+            );
         }
         channelGroupIndex += 1;
     }
