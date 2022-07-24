@@ -5,7 +5,6 @@ import {
     SelectMenuInteraction,
     TextChannel,
 } from 'discord.js';
-import { openCreateModal } from '../buttons';
 
 export const data: Array<MessageActionRow<MessageSelectMenu>> = [];
 
@@ -37,7 +36,7 @@ export async function execute(interaction: SelectMenuInteraction) {
         }
     }
     await interaction.update({
-        components: [...data, openCreateModal.data],
+        components: [...data],
         fetchReply: true,
     });
 }

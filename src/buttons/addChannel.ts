@@ -1,5 +1,4 @@
 import { ButtonInteraction, MessageActionRow, MessageButton } from 'discord.js';
-import { openCreateModal } from '.';
 import { channelSelect } from '../selects';
 
 export const data = new MessageActionRow<MessageButton>().addComponents(
@@ -11,9 +10,8 @@ export const data = new MessageActionRow<MessageButton>().addComponents(
 
 export async function execute(interaction: ButtonInteraction) {
     interaction.reply({
-        content:
-            "Select channels you want to add or remove below. If you don't see your desired channel, click the button below to create it",
-        components: [...channelSelect.data, openCreateModal.data],
+        content: 'Select channels you want to add or remove below.',
+        components: [...channelSelect.data],
         ephemeral: true,
     });
 }
