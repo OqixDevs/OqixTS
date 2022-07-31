@@ -20,7 +20,7 @@ export async function execute(interaction: ButtonInteraction) {
         if (channelSelect.data.length < 1) {
             await interaction.reply({
                 content:
-                    'Failed to fetch subject channels, please contant administrator',
+                    'Failed to fetch subject channels, please contact administrator',
             });
             return;
         }

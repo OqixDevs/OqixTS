@@ -13,21 +13,23 @@ export async function setupSubjectChannels(guild: Guild) {
     for (const channelGroupId of Config.Instance.Properties
         .SubjectChannelGroupIDs) {
         const channelGroup = guild.channels.cache.get(channelGroupId);
-        if (channelGroup) {
-            channelSelect.data.push(
-                new MessageActionRow<MessageSelectMenu>().addComponents(
-                    new MessageSelectMenu()
-                        .setCustomId('channelSelect-' + channelGroupId)
-                        .setPlaceholder(channelGroup.name)
-                        .setMinValues(1)
-                )
-            );
-        } else {
-            // we don't have a valid channel
-            continue;
-        }
         const categoryChannels = guild.channels.cache.filter(
             (x) => x.parentId === channelGroupId
+        );
+        if (!channelGroup || !categoryChannels || categoryChannels.size < 1) {
+            // we don't have a channel group or it's empty
+            console.log(
+                `Channel Group ID ${channelGroupId} is either not a group, or is empty`
+            );
+            continue;
+        }
+        channelSelect.data.push(
+            new MessageActionRow<MessageSelectMenu>().addComponents(
+                new MessageSelectMenu()
+                    .setCustomId('channelSelect-' + channelGroupId)
+                    .setPlaceholder(channelGroup.name)
+                    .setMinValues(1)
+            )
         );
         if (categoryChannels) {
             for (const subjectChannel of categoryChannels) {
