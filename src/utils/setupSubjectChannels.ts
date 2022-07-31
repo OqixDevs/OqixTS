@@ -22,6 +22,9 @@ export async function setupSubjectChannels(guild: Guild) {
                         .setMinValues(1)
                 )
             );
+        } else {
+            // we don't have a valid channel
+            continue;
         }
         const categoryChannels = guild.channels.cache.filter(
             (x) => x.parentId === channelGroupId
