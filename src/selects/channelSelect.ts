@@ -30,6 +30,8 @@ export async function execute(interaction: SelectMenuInteraction) {
                     interaction.member.user.id,
                     {
                         VIEW_CHANNEL: true,
+                        SEND_MESSAGES: true,
+                        SEND_MESSAGES_IN_THREADS: true,
                     }
                 );
             }
