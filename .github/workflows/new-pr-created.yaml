@@ -13,12 +13,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: "Comment to PR and add labels"
-        uses: actions/github-script@v3
+        uses: actions/github-script@v6
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             var comment = "Hello 👋, thank you for opening new PR to OqixTS 💗\n\n Please, wait till somebody will review your PR.\n"
-            github.issues.createComment({
+            github.rest.issues.createComment({
               issue_number: ${{ github.event.number }},
               owner: context.repo.owner,
               repo: context.repo.repo,
