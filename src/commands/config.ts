@@ -1,9 +1,12 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
 import {
     APIApplicationCommandOptionChoice,
     PermissionFlagsBits,
 } from 'discord-api-types/v9';
-import { CommandInteraction, GuildMember } from 'discord.js';
+import {
+    ChatInputCommandInteraction,
+    GuildMember,
+    SlashCommandBuilder,
+} from 'discord.js';
 import { Config, ConfigKey, ConfigValue, Embed } from '../utils';
 
 class StringOption implements APIApplicationCommandOptionChoice<string> {
@@ -67,7 +70,7 @@ export const data = new SlashCommandBuilder()
         subcommand.setName('reload').setDescription('Fully reload config file')
     );
 
-export async function execute(interaction: CommandInteraction) {
+export async function execute(interaction: ChatInputCommandInteraction) {
     const member = interaction.member as GuildMember;
 
     const property = interaction.options.getString('property');
@@ -79,16 +82,16 @@ export async function execute(interaction: CommandInteraction) {
         const value = Config.Instance.GetPropertySerialized(
             property as ConfigKey
         );
-        embed.addField(property ?? 'None', value);
+        embed.addFields({ name: property ?? 'None', value: value });
         embed.setTitle(`Config property`);
     } else if (subcommand == 'list') {
         const keys = Object.keys(Config.Instance.Properties) as ConfigKey[];
         for (const key of keys) {
-            embed.addField(
-                key,
-                Config.Instance.GetPropertySerialized(key),
-                true
-            );
+            embed.addFields({
+                name: key,
+                value: Config.Instance.GetPropertySerialized(key),
+                inline: true,
+            });
         }
         embed.setTitle(`List of config properties`);
     } else if (subcommand == 'set') {
@@ -115,8 +118,8 @@ export async function execute(interaction: CommandInteraction) {
             );
         }
         embed.setTitle(`Setting property ${property}`);
-        embed.addField('Old value', oldValue);
-        embed.addField('New value', newValueRaw);
+        embed.addFields({ name: 'Old value', value: oldValue });
+        embed.addFields({ name: 'New value', value: newValueRaw });
     } else if (subcommand == 'reload') {
         Config.Instance.LoadConfig();
         embed.setTitle(`Config reloaded`);

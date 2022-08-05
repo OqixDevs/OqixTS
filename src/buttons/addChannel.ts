@@ -1,12 +1,17 @@
-import { ButtonInteraction, MessageActionRow, MessageButton } from 'discord.js';
+import {
+    ButtonInteraction,
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+} from 'discord.js';
 import { channelSelect } from '../selects';
 import { setupSubjectChannels } from '../utils';
 
-export const data = new MessageActionRow<MessageButton>().addComponents(
-    new MessageButton()
+export const data = new ActionRowBuilder<ButtonBuilder>().addComponents(
+    new ButtonBuilder()
         .setCustomId('addChannel')
         .setLabel('Add Channels')
-        .setStyle('PRIMARY')
+        .setStyle(ButtonStyle.Primary)
 );
 
 export async function execute(interaction: ButtonInteraction) {

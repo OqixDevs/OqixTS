@@ -1,4 +1,4 @@
-import { Guild, MessageActionRow, MessageSelectMenu } from 'discord.js';
+import { Guild, ActionRowBuilder, SelectMenuBuilder } from 'discord.js';
 import { channelSelect } from '../selects';
 import { Config } from './config';
 
@@ -24,8 +24,8 @@ export async function setupSubjectChannels(guild: Guild) {
             continue;
         }
         channelSelect.data.push(
-            new MessageActionRow<MessageSelectMenu>().addComponents(
-                new MessageSelectMenu()
+            new ActionRowBuilder<SelectMenuBuilder>().addComponents(
+                new SelectMenuBuilder()
                     .setCustomId('channelSelect-' + channelGroupId)
                     .setPlaceholder(channelGroup.name)
                     .setMinValues(1)

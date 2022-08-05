@@ -1,5 +1,4 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
-import { CommandInteraction } from 'discord.js';
+import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 import { sanitizeUrl } from '@braintree/sanitize-url';
 import { assignRole, scrapeConfirmationStudies } from '../utils';
 import { scrapeThesis } from '../utils';
@@ -29,7 +28,7 @@ export const data = new SlashCommandBuilder()
             .setRequired(true)
     );
 
-export async function execute(interaction: CommandInteraction) {
+export async function execute(interaction: ChatInputCommandInteraction) {
     let userLog = undefined;
     try {
         userLog = fs.readFileSync('./userLog.json', 'utf8');

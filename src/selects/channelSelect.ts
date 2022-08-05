@@ -1,12 +1,13 @@
 import {
     GuildMember,
-    MessageActionRow,
-    MessageSelectMenu,
+    ActionRowBuilder,
+    SelectMenuBuilder,
+    PermissionsBitField,
     SelectMenuInteraction,
     TextChannel,
 } from 'discord.js';
 
-export const data: Array<MessageActionRow<MessageSelectMenu>> = [];
+export const data: Array<ActionRowBuilder<SelectMenuBuilder>> = [];
 
 export async function execute(interaction: SelectMenuInteraction) {
     if (!interaction.member) {
@@ -20,7 +21,9 @@ export async function execute(interaction: SelectMenuInteraction) {
             const userPermissions = textChannel.permissionsFor(
                 interaction.member as GuildMember
             );
-            const userCanRead = userPermissions.has('VIEW_CHANNEL');
+            const userCanRead = userPermissions.has(
+                PermissionsBitField.Flags.ViewChannel
+            );
             if (userCanRead) {
                 await textChannel.permissionOverwrites.delete(
                     interaction.member.user.id
@@ -29,9 +32,9 @@ export async function execute(interaction: SelectMenuInteraction) {
                 await textChannel.permissionOverwrites.create(
                     interaction.member.user.id,
                     {
-                        VIEW_CHANNEL: true,
-                        SEND_MESSAGES: true,
-                        SEND_MESSAGES_IN_THREADS: true,
+                        ViewChannel: true,
+                        SendMessages: true,
+                        SendMessagesInThreads: true,
                     }
                 );
             }

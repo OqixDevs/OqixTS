@@ -1,11 +1,11 @@
 import { mock } from 'jest-mock-extended';
-import { CommandInteraction } from 'discord.js';
+import { ChatInputCommandInteraction } from 'discord.js';
 import { oqix } from '../src/commands';
 
 describe('Tests for oqix command', () => {
-    let interaction: CommandInteraction;
+    let interaction: ChatInputCommandInteraction;
     beforeEach(() => {
-        interaction = mock<CommandInteraction>();
+        interaction = mock<ChatInputCommandInteraction>();
     });
 
     it('Calling execute should call reply', () => {

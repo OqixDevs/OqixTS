@@ -1,11 +1,16 @@
-import { ButtonInteraction, MessageActionRow, MessageButton } from 'discord.js';
+import {
+    ButtonInteraction,
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+} from 'discord.js';
 import { createChannelModal } from '../modals';
 
-export const data = new MessageActionRow<MessageButton>().addComponents(
-    new MessageButton()
+export const data = new ActionRowBuilder<ButtonBuilder>().addComponents(
+    new ButtonBuilder()
         .setCustomId('openCreateModal')
         .setLabel('Create New Channel')
-        .setStyle('PRIMARY')
+        .setStyle(ButtonStyle.Primary)
 );
 
 export async function execute(interaction: ButtonInteraction) {

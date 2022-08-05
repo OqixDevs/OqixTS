@@ -1,5 +1,4 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
-import { CommandInteraction } from 'discord.js';
+import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
 
 /**
@@ -16,9 +15,8 @@ export const data = new SlashCommandBuilder()
             .setRequired(true)
     );
 
-export async function execute(interaction: CommandInteraction) {
+export async function execute(interaction: ChatInputCommandInteraction) {
     const message = interaction.options.getString('message');
-
     if (!message) {
         return interaction.reply({
             content: 'You need to input a message.',

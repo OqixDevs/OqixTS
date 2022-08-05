@@ -1,6 +1,5 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
-import { CommandInteraction } from 'discord.js';
+import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 
 /**
  * Resetarts bot
@@ -10,7 +9,7 @@ export const data = new SlashCommandBuilder()
     .setDescription('Will restart bot')
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator);
 
-export async function execute(interaction: CommandInteraction) {
+export async function execute(interaction: ChatInputCommandInteraction) {
     return interaction
         .reply('Restarting bot...')
         .then(() => interaction.client.destroy())

@@ -1,5 +1,8 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
-import { CommandInteraction } from 'discord.js';
+import {
+    ChannelType,
+    ChatInputCommandInteraction,
+    SlashCommandBuilder,
+} from 'discord.js';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
 
 /**
@@ -16,7 +19,7 @@ export const data = new SlashCommandBuilder()
             .setRequired(true)
     );
 
-export async function execute(interaction: CommandInteraction) {
+export async function execute(interaction: ChatInputCommandInteraction) {
     const amount = interaction.options.getInteger('amount');
 
     if (!amount || !interaction) {
@@ -35,8 +38,8 @@ export async function execute(interaction: CommandInteraction) {
     }
 
     if (
-        interaction.channel?.type === 'GUILD_TEXT' ||
-        interaction.channel?.type === 'GUILD_NEWS'
+        interaction.channel?.type === ChannelType.GuildText ||
+        interaction.channel?.type === ChannelType.GuildNews
     ) {
         await interaction.channel
             ?.bulkDelete(amount)
@@ -54,4 +57,9 @@ export async function execute(interaction: CommandInteraction) {
                 });
             });
     }
+
+    return interaction.reply({
+        content: 'You are in invalid channel',
+        ephemeral: true,
+    });
 }

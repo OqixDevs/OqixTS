@@ -1,4 +1,4 @@
-import { Client } from 'discord.js';
+import { Client, GatewayIntentBits } from 'discord.js';
 import { interactionListener } from './listeners';
 import { default as registerCommands } from './registerCommands';
 import dotenv from 'dotenv';
@@ -12,7 +12,7 @@ export default () => {
     const token = process.env.DISCORD_TOKEN; // add your token here
     console.log('Bot is starting...');
     const client = new Client({
-        intents: ['GUILDS', 'GUILD_MESSAGES'],
+        intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
     });
     client.login(token);
     client.once('ready', () => {
