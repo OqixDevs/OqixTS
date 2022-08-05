@@ -46,6 +46,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             .then((messages) =>
                 interaction.reply({
                     content: `Deleted ${messages.size} messages.`,
+                    ephemeral: true,
                 })
             )
             .catch((error: unknown) => {
