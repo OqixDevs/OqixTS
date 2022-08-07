@@ -7,6 +7,9 @@ import {
 import { channelSelect } from '../selects';
 import { setupSubjectChannels } from '../utils';
 
+/**
+ * Setups button for adding channels
+ */
 export const data = new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
         .setCustomId('addChannel')

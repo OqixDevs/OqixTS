@@ -1,1 +1,1 @@
-export * as createChannelModal from './createChannel';
+export * as createChannelModal from './createChannelModal';

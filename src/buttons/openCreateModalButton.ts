@@ -6,6 +6,9 @@ import {
 } from 'discord.js';
 import { createChannelModal } from '../modals';
 
+/**
+ * Button for creating new channels
+ */
 export const data = new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
         .setCustomId('openCreateModal')

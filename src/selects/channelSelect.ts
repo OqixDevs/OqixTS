@@ -7,6 +7,9 @@ import {
     TextChannel,
 } from 'discord.js';
 
+/**
+ * Select menu for assigning channels to users
+ */
 export const data: Array<ActionRowBuilder<SelectMenuBuilder>> = [];
 
 export async function execute(interaction: SelectMenuInteraction) {

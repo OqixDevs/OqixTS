@@ -1,7 +1,6 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 import { sanitizeUrl } from '@braintree/sanitize-url';
-import { assignRole, scrapeConfirmationStudies } from '../utils';
-import { scrapeThesis } from '../utils';
+import { assignRole, scrapeConfirmationStudies, scrapeThesis } from '../utils';
 import * as fs from 'fs';
 
 /**

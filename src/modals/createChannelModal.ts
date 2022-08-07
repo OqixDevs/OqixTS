@@ -7,6 +7,9 @@ import {
     TextInputStyle,
 } from 'discord.js';
 
+/**
+ * Modal for creating new channels
+ */
 export const data = new ModalBuilder()
     .setCustomId('createChannelModal')
     .setTitle('Create New Channel')
