@@ -23,4 +23,4 @@ runs:
         mkdir ~/.ssh
         echo $KNOWN_HOSTS >> ~/.ssh/known_hosts
         echo "Connect to VM and start app..."
-        ssh -i ~/vm_key.key $ADDRESS_VM "cd /app && docker pull mimotej/oqix:latest &&" 'docker kill $(sudo docker ps -a -q); docker rm $(docker ps --filter status=exited -q);' "docker run -d -e DISCORD_TOKEN=$DISCORD_TOKEN -e CLIENT_ID=$CLIENT_ID -e GUILD_ID=$GUILD_ID -it --mount type=bind,source=/app/userLog.json,target=/root/userLog.json mimotej/oqix:latest"
+        ssh -i ~/vm_key.key $ADDRESS_VM "cd /app && docker pull mimotej/oqix:latest &&" 'docker kill $(sudo docker ps -a -q); docker rm $(docker ps --filter status=exited -q);' "docker run -d -e DISCORD_TOKEN=$DISCORD_TOKEN -e CLIENT_ID=$CLIENT_ID -e GUILD_ID=$GUILD_ID -it --mount type=bind,source=/app/userLog.json,target=/root/userLog.json --mount type=bind,source=/app/config.json,target=/root/config.json mimotej/oqix:latest"

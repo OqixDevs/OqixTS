@@ -1,5 +1,6 @@
 import { PermissionFlagsBits } from 'discord-api-types/v9';
 import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
+import { setupSubjectChannels } from '../utils';
 
 /**
  * Resetarts bot
@@ -14,5 +15,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         .reply('Restarting bot...')
         .then(() => interaction.client.destroy())
         .then(() => interaction.client.login(process.env.DISCORD_TOKEN))
+        .then(() => {
+            for (const guild of interaction.client.guilds.cache) {
+                setupSubjectChannels(guild[1]);
+            }
+        })
         .then(() => interaction.channel?.send('Bot successfully restarted!'));
 }
