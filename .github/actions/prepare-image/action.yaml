@@ -11,12 +11,8 @@ runs:
       shell: bash
       run: |
         docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-    - name: Build image
+    - name: Build image and push
       shell: bash
       run: |
         docker buildx create --name oqixBuilder --use
-        docker buildx build --platform linux/arm64 -t mimotej/oqix:$GITHUB_SHA -t mimotej/oqix:latest .
-    - name: Push image to dockerhub
-      shell: bash
-      run: |
-        docker push mimotej/oqix --all-tags
+        docker buildx build --platform linux/arm64 -t mimotej/oqix:$GITHUB_SHA -t mimotej/oqix:latest --push .
