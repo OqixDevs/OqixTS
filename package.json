@@ -52,6 +52,6 @@
     "typescript": "4.7.4"
   },
   "optionalDependencies": {
-    "nodemon": "^2.0.19"
+    "nodemon": "2.0.19"
   }
 }
