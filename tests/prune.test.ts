@@ -1,20 +1,21 @@
 import { mockDeep, mockReset } from 'jest-mock-extended';
 import {
     Collection,
-    CommandInteraction,
+    ChatInputCommandInteraction,
     GuildTextBasedChannel,
     Message,
+    ChannelType,
 } from 'discord.js';
 import { prune } from '../src/commands';
 
 describe('Tests for prune command', () => {
-    const interaction = mockDeep<CommandInteraction>();
+    const interaction = mockDeep<ChatInputCommandInteraction>();
     beforeEach(() => {
         (interaction.channel as GuildTextBasedChannel).bulkDelete = jest.fn(
             () => Promise.resolve(mockDeep<Collection<string, Message>>())
         );
         if (interaction.channel) {
-            interaction.channel.type = 'GUILD_TEXT';
+            interaction.channel.type = ChannelType.GuildText;
         }
     });
 

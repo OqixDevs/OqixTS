@@ -1,9 +1,9 @@
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
-import { CommandInteraction } from 'discord.js';
+import { ChatInputCommandInteraction } from 'discord.js';
 import { uznanipredmetu } from '../src/commands';
 
 describe('Tests for uznanipredmetu command', () => {
-    let interaction: DeepMockProxy<CommandInteraction>;
+    let interaction: DeepMockProxy<ChatInputCommandInteraction>;
     let fitTotalCredits: number;
     let fitTotalSemesters: number;
     let fiMuniCourseCredits: number;
@@ -11,7 +11,7 @@ describe('Tests for uznanipredmetu command', () => {
         fitTotalCredits = 186;
         fiMuniCourseCredits = 5;
         fitTotalSemesters = 6;
-        interaction = mockDeep<CommandInteraction>();
+        interaction = mockDeep<ChatInputCommandInteraction>();
     });
 
     it('Calling execute should call reply', () => {

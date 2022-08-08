@@ -1,6 +1,5 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
-import { CommandInteraction } from 'discord.js';
+import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 
 /**
  * Returns available information about user.
@@ -16,7 +15,7 @@ export const data = new SlashCommandBuilder()
             .setRequired(true)
     );
 
-export async function execute(interaction: CommandInteraction) {
+export async function execute(interaction: ChatInputCommandInteraction) {
     const user = interaction.options.getUser('user');
 
     if (user) {
@@ -27,4 +26,8 @@ export async function execute(interaction: CommandInteraction) {
             ephemeral: true,
         });
     }
+    return interaction.reply({
+        content: 'You need to input a user.',
+        ephemeral: true,
+    });
 }

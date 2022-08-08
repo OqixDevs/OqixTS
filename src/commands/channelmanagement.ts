@@ -1,6 +1,5 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
-import { CommandInteraction } from 'discord.js';
+import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 import { addChannel } from '../buttons';
 
 export const data = new SlashCommandBuilder()
@@ -8,7 +7,7 @@ export const data = new SlashCommandBuilder()
     .setDescription('Setup user channel management')
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator);
 
-export async function execute(interaction: CommandInteraction) {
+export async function execute(interaction: ChatInputCommandInteraction) {
     interaction.reply({
         components: [addChannel.data],
     });

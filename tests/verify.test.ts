@@ -1,5 +1,5 @@
 import { mockDeep } from 'jest-mock-extended';
-import { CommandInteraction, Role } from 'discord.js';
+import { ChatInputCommandInteraction, Role } from 'discord.js';
 import { verify } from '../src/commands';
 import * as utils from '../src/utils';
 import * as fs from 'fs';
@@ -17,7 +17,7 @@ const dict = {
 let nameUser = ' Josef Novak';
 
 describe('Tests for verify command', () => {
-    const interaction = mockDeep<CommandInteraction>();
+    const interaction = mockDeep<ChatInputCommandInteraction>();
     beforeEach(() => {
         jest.useFakeTimers();
         jest.setSystemTime(new Date(2022, 6, 13));

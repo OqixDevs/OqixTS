@@ -1,26 +1,30 @@
 import {
-    Modal,
-    MessageActionRow,
-    ModalActionRowComponent,
-    TextInputComponent,
+    ModalBuilder,
+    ActionRowBuilder,
+    ModalActionRowComponentBuilder,
+    TextInputBuilder,
     ModalSubmitInteraction,
+    TextInputStyle,
 } from 'discord.js';
 
-export const data = new Modal()
+/**
+ * Modal for creating new channels
+ */
+export const data = new ModalBuilder()
     .setCustomId('createChannelModal')
     .setTitle('Create New Channel')
     .addComponents(
-        new MessageActionRow<ModalActionRowComponent>().addComponents(
-            new TextInputComponent()
+        new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
+            new TextInputBuilder()
                 .setCustomId('channelName')
                 .setLabel('Channel name')
-                .setStyle('SHORT')
+                .setStyle(TextInputStyle.Short)
         ),
-        new MessageActionRow<ModalActionRowComponent>().addComponents(
-            new TextInputComponent()
+        new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
+            new TextInputBuilder()
                 .setCustomId('channelDescription')
                 .setLabel('Channel description')
-                .setStyle('SHORT')
+                .setStyle(TextInputStyle.Short)
         )
     );
 export async function execute(interaction: ModalSubmitInteraction) {
