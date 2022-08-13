@@ -17,15 +17,14 @@ export default (client: Client) => {
             if (interaction.isCommand()) {
                 await commands[interaction.commandName].execute(interaction);
             } else if (interaction.isButton()) {
-                await buttons[interaction.customId].execute(interaction);
+                const customId = parseCustomId(interaction.customId);
+                await buttons[customId].execute(interaction);
             } else if (interaction.isSelectMenu()) {
-                const selectName = interaction.customId.substring(
-                    0,
-                    interaction.customId.indexOf('-')
-                );
-                await selects[selectName].execute(interaction);
+                const customId = parseCustomId(interaction.customId);
+                await selects[customId].execute(interaction);
             } else if (interaction.isModalSubmit()) {
-                await modals[interaction.customId].execute(interaction);
+                const customId = parseCustomId(interaction.customId);
+                await modals[customId].execute(interaction);
             }
         } catch (error) {
             console.error(error);
@@ -38,3 +37,11 @@ export default (client: Client) => {
         }
     });
 };
+
+function parseCustomId(customId: string) {
+    const slashIndex = customId.indexOf('-');
+    if (slashIndex > -1) {
+        customId = customId.substring(0, customId.indexOf('-'));
+    }
+    return customId;
+}
