@@ -3,6 +3,7 @@ import * as commandsModule from '.././commands';
 import * as buttonsModule from '.././buttons';
 import * as selectsModule from '.././selects';
 import * as modalsModule from '.././modals';
+import { parseCustomId } from '../utils';
 /**
  * Listens for interaction events and calls the appropriate function.
  * @param client The Discord client.
@@ -37,11 +38,3 @@ export default (client: Client) => {
         }
     });
 };
-
-function parseCustomId(customId: string) {
-    const slashIndex = customId.indexOf('-');
-    if (slashIndex > -1) {
-        customId = customId.substring(0, customId.indexOf('-'));
-    }
-    return customId;
-}

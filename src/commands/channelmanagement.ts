@@ -8,6 +8,17 @@ export const data = new SlashCommandBuilder()
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator);
 
 export async function execute(interaction: ChatInputCommandInteraction) {
+    if (!interaction.guild) {
+        return;
+    }
+    if (addChannel.data.components.length < 1) {
+        interaction.reply({
+            content: 'No channels have been set up',
+            ephemeral: true,
+        });
+        return;
+    }
+
     interaction.reply({
         components: [addChannel.data],
     });

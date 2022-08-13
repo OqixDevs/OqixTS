@@ -1,21 +1,10 @@
-import {
-    ButtonInteraction,
-    ActionRowBuilder,
-    ButtonBuilder,
-    ButtonStyle,
-} from 'discord.js';
+import { ButtonInteraction, ActionRowBuilder, ButtonBuilder } from 'discord.js';
 import { channelSelect } from '../selects';
-import { setupSubjectChannels } from '../utils';
 
 /**
  * Setups button for adding channels
  */
-export const data = new ActionRowBuilder<ButtonBuilder>().addComponents(
-    new ButtonBuilder()
-        .setCustomId('addChannel')
-        .setLabel('Add Channels')
-        .setStyle(ButtonStyle.Primary)
-);
+export const data = new ActionRowBuilder<ButtonBuilder>().addComponents();
 
 export async function execute(interaction: ButtonInteraction) {
     if (!interaction.guild) {
@@ -23,20 +12,22 @@ export async function execute(interaction: ButtonInteraction) {
         return;
     }
 
-    if (channelSelect.data.length < 1) {
-        setupSubjectChannels(interaction.guild);
-        if (channelSelect.data.length < 1) {
-            await interaction.reply({
-                content:
-                    'Failed to fetch subject channels, please contact administrator',
-            });
-            return;
-        }
+    const groupId = interaction.customId.substring(
+        interaction.customId.indexOf('-') + 1
+    );
+    const subjectSelect = channelSelect.data.find((x) => x.id == groupId);
+
+    if (!subjectSelect) {
+        interaction.reply({
+            content: 'Could not find select with ID ' + groupId,
+            ephemeral: true,
+        });
+        return;
     }
 
     interaction.reply({
         content: 'Select channels you want to add or remove below.',
-        components: [...channelSelect.data],
+        components: [...subjectSelect.data],
         ephemeral: true,
     });
 }

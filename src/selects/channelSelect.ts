@@ -7,10 +7,15 @@ import {
     TextChannel,
 } from 'discord.js';
 
+export type SelectID = {
+    id: string;
+    data: Array<ActionRowBuilder<SelectMenuBuilder>>;
+};
+
 /**
  * Select menu for assigning channels to users
  */
-export const data: Array<ActionRowBuilder<SelectMenuBuilder>> = [];
+export const data: Array<SelectID> = [];
 
 export async function execute(interaction: SelectMenuInteraction) {
     if (!interaction.member) {
@@ -43,8 +48,18 @@ export async function execute(interaction: SelectMenuInteraction) {
             }
         }
     }
+
+    const groupId = interaction.customId.substring(
+        interaction.customId.lastIndexOf('-') + 1
+    );
+
+    const select = data.find((x) => x.id == groupId);
+    if (!select || !select.data) {
+        return;
+    }
+
     await interaction.update({
-        components: [...data],
+        components: [...select.data],
         fetchReply: true,
     });
 }
