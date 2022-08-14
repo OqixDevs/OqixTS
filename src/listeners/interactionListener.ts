@@ -3,6 +3,7 @@ import * as commandsModule from '.././commands';
 import * as buttonsModule from '.././buttons';
 import * as selectsModule from '.././selects';
 import * as modalsModule from '.././modals';
+import { parseCustomId } from '../utils';
 /**
  * Listens for interaction events and calls the appropriate function.
  * @param client The Discord client.
@@ -17,21 +18,21 @@ export default (client: Client) => {
             if (interaction.isCommand()) {
                 await commands[interaction.commandName].execute(interaction);
             } else if (interaction.isButton()) {
-                await buttons[interaction.customId].execute(interaction);
+                const customId = parseCustomId(interaction.customId);
+                await buttons[customId].execute(interaction);
             } else if (interaction.isSelectMenu()) {
-                const selectName = interaction.customId.substring(
-                    0,
-                    interaction.customId.indexOf('-')
-                );
-                await selects[selectName].execute(interaction);
+                const customId = parseCustomId(interaction.customId);
+                await selects[customId].execute(interaction);
             } else if (interaction.isModalSubmit()) {
-                await modals[interaction.customId].execute(interaction);
+                const customId = parseCustomId(interaction.customId);
+                await modals[customId].execute(interaction);
             }
         } catch (error) {
             console.error(error);
             if (interaction.isRepliable()) {
                 await interaction.reply({
-                    content: 'There was an error while executing this command!',
+                    content:
+                        'There was an error while executing this interaction!',
                     ephemeral: true,
                 });
             }
