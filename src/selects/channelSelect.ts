@@ -21,6 +21,7 @@ export async function execute(interaction: SelectMenuInteraction) {
     if (!interaction.member) {
         return;
     }
+    await interaction.deferUpdate();
     for (const selectedChannelId of interaction.values) {
         const channel =
             interaction.guild?.channels.cache.get(selectedChannelId);
@@ -58,8 +59,7 @@ export async function execute(interaction: SelectMenuInteraction) {
         return;
     }
 
-    await interaction.update({
+    await interaction.editReply({
         components: [...select.data],
-        fetchReply: true,
     });
 }

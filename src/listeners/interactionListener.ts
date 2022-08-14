@@ -31,7 +31,8 @@ export default (client: Client) => {
             console.error(error);
             if (interaction.isRepliable()) {
                 await interaction.reply({
-                    content: 'There was an error while executing this command!',
+                    content:
+                        'There was an error while executing this interaction!',
                     ephemeral: true,
                 });
             }
