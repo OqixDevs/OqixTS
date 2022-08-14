@@ -10,25 +10,6 @@ import { channelSelect } from '../selects';
 import { SelectID } from '../selects/channelSelect';
 import { Config } from './config';
 
-function capitalize(str: string) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-function setupPlaceholder(
-    select: ActionRowBuilder<SelectMenuBuilder>,
-    lastItemIndex: number
-) {
-    const firstLabel = select.components[0].options[0].data.label;
-    const lastLabel =
-        select.components[0].options[lastItemIndex - 1].data.label;
-
-    const firstCode = firstLabel?.split(' ')[0];
-    const lastCode = lastLabel?.split(' ')[0];
-
-    select.components[0].setPlaceholder(`${firstCode} - ${lastCode}`);
-    select.components[0].setMaxValues(lastItemIndex);
-}
-
 export type ChannelGroups = {
     group: {
         id: string;
@@ -40,12 +21,36 @@ export type ChannelGroups = {
     }>;
 };
 export class SubjectChannels {
+    private static capitalize(str: string) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    private static setupPlaceholder(
+        select: ActionRowBuilder<SelectMenuBuilder>,
+        lastItemIndex: number
+    ) {
+        const firstLabel = select.components[0].options[0].data.label;
+        const lastLabel =
+            select.components[0].options[lastItemIndex - 1].data.label;
+
+        const firstCode = firstLabel?.split(' ')[0];
+        const lastCode = lastLabel?.split(' ')[0];
+
+        select.components[0].setPlaceholder(`${firstCode} - ${lastCode}`);
+        select.components[0].setMaxValues(lastItemIndex);
+    }
+
     static async setupSubjectChannels(guild: Guild) {
         channelSelect.data.length = 0;
         addChannel.data.components.length = 0;
 
         const maxItemIndex = 24;
         let selectIndex = 0;
+
+        if (Config.Instance.Properties.SubjectChannelGroupIDs.length > 5) {
+            console.log('Attempting to set up for more than 5 categories');
+            return;
+        }
 
         for (const channelGroupId of Config.Instance.Properties
             .SubjectChannelGroupIDs) {
@@ -103,14 +108,14 @@ export class SubjectChannels {
                 if (nameParts.length > 0) {
                     subjectName = `${nameParts[0].toUpperCase()} ${nameParts
                         .splice(1)
-                        .map(capitalize)
+                        .map(this.capitalize)
                         .join(' ')}`;
                 } else {
-                    subjectName = capitalize(subjectName);
+                    subjectName = this.capitalize(subjectName);
                 }
 
                 if (channelIndex > 0 && channelIndex % maxItemIndex == 0) {
-                    setupPlaceholder(selectRow, maxItemIndex);
+                    this.setupPlaceholder(selectRow, maxItemIndex);
                     ++selectIndex;
                     selectRow =
                         new ActionRowBuilder<SelectMenuBuilder>().addComponents(
@@ -133,7 +138,7 @@ export class SubjectChannels {
                 ++channelIndex;
             }
 
-            setupPlaceholder(selectRow, channelIndex % maxItemIndex);
+            this.setupPlaceholder(selectRow, channelIndex % maxItemIndex);
         }
     }
 }
