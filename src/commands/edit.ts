@@ -8,13 +8,11 @@ import { PermissionFlagsBits } from 'discord-api-types/v9';
 import { Embed } from '../utils';
 
 /**
- * Makes an announcement into a channel.
+ * Edits existing bot message in a channel.
  */
 export const data = new SlashCommandBuilder()
     .setName('edit')
-    .setDescription(
-        'Edit bots message in a channel (current channel if not otherwise specified)'
-    )
+    .setDescription('Edit bots message in a channel')
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .addStringOption((option) =>
         option
