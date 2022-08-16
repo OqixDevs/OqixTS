@@ -8,3 +8,4 @@ export * as restart from './restart';
 export * as verify from './verify';
 export * as config from './config';
 export * as channelmanagement from './channelmanagement';
+export * as edit from './edit';
