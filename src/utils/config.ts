@@ -3,6 +3,8 @@ import * as fs from 'fs';
 export class ConfigProperties {
     DefaultColor = '#0099ff';
     SubjectChannelGroupIDs: Array<string> = [];
+    NewChannelNotificationEnabled = false;
+    NewChannelNotificationChannel = '';
 }
 
 export type ConfigKey = keyof ConfigProperties;
@@ -40,6 +42,8 @@ export class Config {
         const value = this.Properties[property];
         if (typeof value === 'object') {
             return JSON.stringify(this.Properties[property]);
+        } else if (value == '') {
+            return '*empty*';
         }
         return value.toString();
     }
@@ -53,7 +57,11 @@ export class Config {
         if (fs.existsSync(this.configPath)) {
             const configFile = fs.readFileSync(this.configPath, 'utf-8');
             const configJson = JSON.parse(configFile);
-            this.Properties = configJson as ConfigProperties;
+            const propertiesObject = Object.assign(
+                new ConfigProperties(),
+                configJson
+            );
+            this.Properties = propertiesObject as ConfigProperties;
         } else {
             fs.writeFileSync(
                 this.configPath,
