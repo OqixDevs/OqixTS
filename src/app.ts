@@ -1,5 +1,5 @@
 import { Client, GatewayIntentBits } from 'discord.js';
-import { interactionListener } from './listeners';
+import { channelListener, interactionListener } from './listeners';
 import { default as registerCommands } from './registerCommands';
 import dotenv from 'dotenv';
 import { SubjectChannels } from './utils';
@@ -24,4 +24,5 @@ export default () => {
     });
 
     interactionListener(client);
+    channelListener(client);
 };
