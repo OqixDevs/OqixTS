@@ -23,7 +23,7 @@ export default (client: Client) => {
                 );
                 if (notifyChannel?.isTextBased()) {
                     await notifyChannel.send({
-                        content: `New subject channel created *#${channel.name}*`,
+                        content: `New course channel created \`#${channel.name}\``,
                     });
                 }
             }
