@@ -1,3 +1,4 @@
+import { PermissionFlagsBits } from 'discord-api-types/v9';
 import {
     ChatInputCommandInteraction,
     GuildMemberRoleManager,
@@ -16,6 +17,11 @@ export const data = new SlashCommandBuilder()
         sub
             .setName('remove')
             .setDescription('Remove corresponding channel role')
+    )
+    .addSubcommand((sub) =>
+        sub
+            .setName('create')
+            .setDescription('Create corresponding channel role')
     );
 
 export async function execute(interaction: ChatInputCommandInteraction) {
@@ -35,15 +41,55 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         return;
     }
 
-    let action = '';
     const channelName = (interaction.channel as NonThreadGuildBasedChannel)
         .name;
     const subjectCode = channelName
         .substring(0, channelName.indexOf('-'))
         .toUpperCase();
     const subjectRole = guild?.roles.cache.find((r) => r.name == subjectCode);
+    const roleManager = interaction.member?.roles as GuildMemberRoleManager;
+    let action = '';
+    if (subcommand == 'add' && subjectRole) {
+        action = 'Added';
+        await roleManager.member.roles.add(subjectRole);
+    } else if (subcommand == 'remove' && subjectRole) {
+        action = 'Removed';
+        await roleManager.member.roles.remove(subjectRole);
+    } else if (subcommand == 'create') {
+        const parentId =
+            (interaction.channel as NonThreadGuildBasedChannel)?.parentId ??
+            '-1';
+        const canCreate =
+            interaction.memberPermissions?.has(
+                PermissionFlagsBits.ManageRoles
+            ) && config.SubjectChannelGroupIDs.includes(parentId);
+        if (!canCreate) {
+            await interaction.reply({
+                content: `You cannot create roles in this channel`,
+                ephemeral: true,
+            });
+            return;
+        }
 
-    if (!subjectRole) {
+        if (!subjectRole) {
+            await interaction.guild?.roles.create({
+                mentionable: true,
+                name: `${subjectCode}`,
+                hoist: false,
+            });
+
+            await interaction.reply({
+                content: `\`${subjectCode}\` role created`,
+            });
+            return;
+        } else {
+            await interaction.reply({
+                content: `\`${subjectCode}\` role already exists`,
+                ephemeral: true,
+            });
+            return;
+        }
+    } else {
         await interaction.reply({
             content: `This channel has no special role`,
             ephemeral: true,
@@ -51,17 +97,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         return;
     }
 
-    const roleManager = interaction.member?.roles as GuildMemberRoleManager;
-    if (subcommand == 'add') {
-        action = 'Added';
-        await roleManager.member.roles.add(subjectRole);
-    } else {
-        action = 'Removed';
-        await roleManager.member.roles.remove(subjectRole);
-    }
-
     await interaction.reply({
-        content: `${action} role ${subjectCode}`,
+        content: `${action} role \`${subjectCode}\``,
         ephemeral: true,
     });
 }
