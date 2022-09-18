@@ -80,6 +80,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
             await interaction.reply({
                 content: `\`${subjectCode}\` role created`,
+                ephemeral: true,
             });
             return;
         } else {
