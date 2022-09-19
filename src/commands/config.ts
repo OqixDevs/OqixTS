@@ -105,7 +105,6 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 .split(',')
                 .filter((x) => x)
                 .map((x) => x.trim());
-            console.log(newValueArray);
             Config.Instance.SetProperty(
                 property as ConfigKey,
                 newValueArray as ConfigValue

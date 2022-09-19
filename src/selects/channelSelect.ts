@@ -5,6 +5,7 @@ import {
     PermissionsBitField,
     SelectMenuInteraction,
     TextChannel,
+    GuildMemberRoleManager,
 } from 'discord.js';
 
 export type SelectID = {
@@ -33,10 +34,21 @@ export async function execute(interaction: SelectMenuInteraction) {
             const userCanRead = userPermissions.has(
                 PermissionsBitField.Flags.ViewChannel
             );
+            const subjectCode = channel.name
+                .substring(0, channel.name.indexOf('-'))
+                .toUpperCase();
+            const subjectRole = interaction.guild?.roles.cache.find(
+                (r) => r.name == subjectCode
+            );
+            const roleManager = interaction.member
+                .roles as GuildMemberRoleManager;
             if (userCanRead) {
                 await textChannel.permissionOverwrites.delete(
                     interaction.member.user.id
                 );
+                if (subjectRole) {
+                    await roleManager.member.roles.remove(subjectRole);
+                }
             } else {
                 await textChannel.permissionOverwrites.create(
                     interaction.member.user.id,
@@ -46,6 +58,9 @@ export async function execute(interaction: SelectMenuInteraction) {
                         SendMessagesInThreads: true,
                     }
                 );
+                if (subjectRole) {
+                    await roleManager.member.roles.add(subjectRole);
+                }
             }
         }
     }
