@@ -8,7 +8,7 @@ import {Client, MessageReaction} from 'discord.js';
 // Timeout specifying for how long should collector run = 5 Days
 const TIMEOUT = 432000000;
 // Maximum pin emojis before message is pinned
-const MAX_REACTIONS = 1;
+const MAX_REACTIONS = 3;
 
 export default (client: Client) => {
     client.on('messageCreate', async message => {
