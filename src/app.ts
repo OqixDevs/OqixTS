@@ -1,8 +1,12 @@
-import {Client, GatewayIntentBits} from 'discord.js';
-import {channelListener, interactionListener, pinVoteListener} from './listeners';
-import {default as registerCommands} from './registerCommands';
+import { Client, GatewayIntentBits } from 'discord.js';
+import {
+    channelListener,
+    interactionListener,
+    pinVoteListener,
+} from './listeners';
+import { default as registerCommands } from './registerCommands';
 import dotenv from 'dotenv';
-import {SubjectChannels} from './utils';
+import { SubjectChannels } from './utils';
 
 /**
  * Main function which is called when the bot is started.
@@ -13,7 +17,11 @@ export default () => {
     const token = process.env.DISCORD_TOKEN; // add your token here
     console.log('Bot is starting...');
     const client = new Client({
-        intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMessageReactions],
+        intents: [
+            GatewayIntentBits.Guilds,
+            GatewayIntentBits.GuildMessages,
+            GatewayIntentBits.GuildMessageReactions,
+        ],
     });
     client.login(token);
     client.once('ready', () => {

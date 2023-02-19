@@ -1,4 +1,4 @@
-import {Client, MessageReaction} from 'discord.js';
+import { Client, MessageReaction } from 'discord.js';
 
 /**
  * Listens for interaction events and calls the appropriate function.
@@ -11,12 +11,17 @@ const TIMEOUT = 432000000;
 const MAX_REACTIONS = 3;
 
 export default (client: Client) => {
-    client.on('messageCreate', async message => {
+    client.on('messageCreate', async (message) => {
         try {
-            const filter = (reaction: MessageReaction) => reaction.emoji.name === '📌';
+            const filter = (reaction: MessageReaction) =>
+                reaction.emoji.name === '📌';
 
             // Set up the collector with the MAX_REACTIONS
-            const collector = message.createReactionCollector({filter, max: MAX_REACTIONS, time: TIMEOUT});
+            const collector = message.createReactionCollector({
+                filter,
+                max: MAX_REACTIONS,
+                time: TIMEOUT,
+            });
 
             collector.on('end', (_, reason) => {
                 // Reactions are no longer collected
@@ -28,5 +33,5 @@ export default (client: Client) => {
         } catch (error) {
             console.log(error);
         }
-    })
+    });
 };
