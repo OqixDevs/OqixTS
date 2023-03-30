@@ -29,9 +29,9 @@
   },
   "homepage": "https://github.com/OqixDevs/OqixTS#readme",
   "dependencies": {
-    "@discordjs/rest": "1.0.1",
-    "discord-api-types": "0.37.2",
-    "discord.js": "14.2.0",
+    "@discordjs/rest": "1.6.0",
+    "discord-api-types": "0.37.36",
+    "discord.js": "14.8.0",
     "dotenv": "16.0.1",
     "jest-mock-extended": "3.0.3"
   },

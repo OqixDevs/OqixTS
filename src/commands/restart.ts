@@ -19,6 +19,6 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             for (const guild of interaction.client.guilds.cache) {
                 SubjectChannels.setupSubjectChannels(guild[1]);
             }
-        })
-        .then(() => interaction.channel?.send('Bot successfully restarted!'));
+            interaction.channel?.send('Bot successfully restarted!');
+        });
 }
