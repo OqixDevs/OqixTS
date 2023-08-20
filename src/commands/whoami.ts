@@ -19,8 +19,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     tag: ${interaction.user.tag}
     user ID: ${interaction.user.id}
     joined on: ${member.joinedAt?.getDate().toString()}/${member.joinedAt
-            ?.getMonth()
-            .toString()}/${member.joinedAt?.getFullYear().toString()}`,
+        ?.getMonth()
+        .toString()}/${member.joinedAt?.getFullYear().toString()}`,
         ephemeral: true,
     });
 }
