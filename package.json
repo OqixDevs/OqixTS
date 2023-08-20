@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/OqixDevs/OqixTS#readme",
   "dependencies": {
-    "@discordjs/rest": "1.7.1",
+    "@discordjs/rest": "2.0.0",
     "discord-api-types": "0.37.52",
     "discord.js": "14.12.1",
     "dotenv": "16.3.1",
