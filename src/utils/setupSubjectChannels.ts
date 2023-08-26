@@ -3,7 +3,7 @@ import {
     ButtonBuilder,
     ButtonStyle,
     Guild,
-    SelectMenuBuilder,
+    StringSelectMenuBuilder,
 } from 'discord.js';
 import { addChannel } from '../buttons';
 import { channelSelect } from '../selects';
@@ -26,7 +26,7 @@ export class SubjectChannels {
     }
 
     private static setupPlaceholder(
-        select: ActionRowBuilder<SelectMenuBuilder>,
+        select: ActionRowBuilder<StringSelectMenuBuilder>,
         lastItemIndex: number
     ) {
         const firstLabel = select.components[0].options[0].data.label;
@@ -90,8 +90,8 @@ export class SubjectChannels {
                 data: [],
             };
             let selectRow =
-                new ActionRowBuilder<SelectMenuBuilder>().addComponents(
-                    new SelectMenuBuilder()
+                new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+                    new StringSelectMenuBuilder()
                         .setCustomId(
                             `channelSelect-${selectIndex}-${subjectGroup.id}`
                         )
@@ -118,8 +118,8 @@ export class SubjectChannels {
                     this.setupPlaceholder(selectRow, maxItemIndex);
                     ++selectIndex;
                     selectRow =
-                        new ActionRowBuilder<SelectMenuBuilder>().addComponents(
-                            new SelectMenuBuilder()
+                        new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+                            new StringSelectMenuBuilder()
                                 .setCustomId(
                                     `channelSelect-${selectIndex}-${subjectGroup.id}`
                                 )

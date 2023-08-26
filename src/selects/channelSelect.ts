@@ -1,7 +1,7 @@
 import {
     GuildMember,
     ActionRowBuilder,
-    SelectMenuBuilder,
+    StringSelectMenuBuilder,
     PermissionsBitField,
     SelectMenuInteraction,
     TextChannel,
@@ -10,7 +10,7 @@ import {
 
 export type SelectID = {
     id: string;
-    data: Array<ActionRowBuilder<SelectMenuBuilder>>;
+    data: Array<ActionRowBuilder<StringSelectMenuBuilder>>;
 };
 
 /**
