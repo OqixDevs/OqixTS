@@ -20,7 +20,7 @@ export default (client: Client) => {
             } else if (interaction.isButton()) {
                 const customId = parseCustomId(interaction.customId);
                 await buttons[customId].execute(interaction);
-            } else if (interaction.isSelectMenu()) {
+            } else if (interaction.isStringSelectMenu()) {
                 const customId = parseCustomId(interaction.customId);
                 await selects[customId].execute(interaction);
             } else if (interaction.isModalSubmit()) {
