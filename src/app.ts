@@ -15,7 +15,9 @@ import { SubjectChannels } from './utils';
 export default () => {
     dotenv.config();
     const token = process.env.DISCORD_TOKEN; // add your token here
+
     console.log('Bot is starting...');
+
     const client = new Client({
         intents: [
             GatewayIntentBits.Guilds,
