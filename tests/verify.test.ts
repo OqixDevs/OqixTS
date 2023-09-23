@@ -24,6 +24,22 @@ const databaseUser = {
     joinDate: new Date(),
 };
 
+const databaseRemovedUser = {
+    id: '123',
+    discordId: '123',
+    idThesis: '2223121',
+    status: 'removed',
+    joinDate: new Date(),
+};
+
+const databaseBannedUser = {
+    id: '123',
+    discordId: '123',
+    idThesis: '2223121',
+    status: 'banned',
+    joinDate: new Date(),
+};
+
 describe('Tests for verify command', () => {
     const interaction = mockDeep<ChatInputCommandInteraction>();
     beforeEach(() => {
@@ -181,6 +197,148 @@ describe('Tests for verify command', () => {
     it('User is already verified', async () => {
         prismaMock.users.findMany.mockResolvedValue([databaseUser]);
         interaction.user.id = '123';
+        interaction.options.getString
+            .calledWith('linktoconfirmationmuni')
+            .mockReturnValue(
+                'https://is.muni.cz/confirmation-of-studies/cccxxd3?lang=en'
+            );
+        interaction.options.getString
+            .calledWith('bachelorthesislink')
+            .mockReturnValue('https://dspace.vutbr.cz/handle/11012/2223121');
+        jest.spyOn(utils, 'scrapeThesis').mockReturnValue(
+            Promise.resolve(nameUser)
+        );
+        jest.spyOn(utils, 'scrapeConfirmationStudies').mockReturnValue(
+            Promise.resolve(dict)
+        );
+        if (interaction.guild) {
+            interaction.guild.roles.cache.find.mockReturnValue(
+                'test' as unknown as Role
+            );
+        }
+        await verify.execute(interaction);
+        expect(interaction.editReply).toHaveBeenCalledWith({
+            content:
+                'User already verified! Contact admin if you need to verify again.',
+        });
+    });
+
+    it('Verified user was removed verification should succeed', async () => {
+        prismaMock.users.findMany.mockResolvedValue([databaseRemovedUser]);
+        interaction.user.id = '123';
+        interaction.options.getString
+            .calledWith('linktoconfirmationmuni')
+            .mockReturnValue(
+                'https://is.muni.cz/confirmation-of-studies/cccxxd3?lang=en'
+            );
+        interaction.options.getString
+            .calledWith('bachelorthesislink')
+            .mockReturnValue('https://dspace.vutbr.cz/handle/11012/2223121');
+        jest.spyOn(utils, 'scrapeThesis').mockReturnValue(
+            Promise.resolve(nameUser)
+        );
+        jest.spyOn(utils, 'scrapeConfirmationStudies').mockReturnValue(
+            Promise.resolve(dict)
+        );
+        if (interaction.guild) {
+            interaction.guild.roles.cache.find.mockReturnValue(
+                'test' as unknown as Role
+            );
+        }
+        await verify.execute(interaction);
+        expect(interaction.editReply).toHaveBeenCalledWith({
+            content: 'You have been successfully verified with role undefined.',
+        });
+    });
+
+    it('Verified user was removed new user uses same thesis verification should succeed', async () => {
+        prismaMock.users.findMany.mockResolvedValue([databaseRemovedUser]);
+        interaction.user.id = '1234';
+        interaction.options.getString
+            .calledWith('linktoconfirmationmuni')
+            .mockReturnValue(
+                'https://is.muni.cz/confirmation-of-studies/cccxxd3?lang=en'
+            );
+        interaction.options.getString
+            .calledWith('bachelorthesislink')
+            .mockReturnValue('https://dspace.vutbr.cz/handle/11012/2223121');
+        jest.spyOn(utils, 'scrapeThesis').mockReturnValue(
+            Promise.resolve(nameUser)
+        );
+        jest.spyOn(utils, 'scrapeConfirmationStudies').mockReturnValue(
+            Promise.resolve(dict)
+        );
+        if (interaction.guild) {
+            interaction.guild.roles.cache.find.mockReturnValue(
+                'test' as unknown as Role
+            );
+        }
+        await verify.execute(interaction);
+        expect(interaction.editReply).toHaveBeenCalledWith({
+            content: 'You have been successfully verified with role undefined.',
+        });
+    });
+
+    it('Verified user was banned verification should fail', async () => {
+        prismaMock.users.findMany.mockResolvedValue([databaseBannedUser]);
+        interaction.user.id = '123';
+        interaction.options.getString
+            .calledWith('linktoconfirmationmuni')
+            .mockReturnValue(
+                'https://is.muni.cz/confirmation-of-studies/cccxxd3?lang=en'
+            );
+        interaction.options.getString
+            .calledWith('bachelorthesislink')
+            .mockReturnValue('https://dspace.vutbr.cz/handle/11012/2223121');
+        jest.spyOn(utils, 'scrapeThesis').mockReturnValue(
+            Promise.resolve(nameUser)
+        );
+        jest.spyOn(utils, 'scrapeConfirmationStudies').mockReturnValue(
+            Promise.resolve(dict)
+        );
+        if (interaction.guild) {
+            interaction.guild.roles.cache.find.mockReturnValue(
+                'test' as unknown as Role
+            );
+        }
+        await verify.execute(interaction);
+        expect(interaction.editReply).toHaveBeenCalledWith({
+            content:
+                'User already verified! Contact admin if you need to verify again.',
+        });
+    });
+    it('Verified user was banned verification should fail', async () => {
+        prismaMock.users.findMany.mockResolvedValue([databaseBannedUser]);
+        interaction.user.id = '123';
+        interaction.options.getString
+            .calledWith('linktoconfirmationmuni')
+            .mockReturnValue(
+                'https://is.muni.cz/confirmation-of-studies/cccxxd3?lang=en'
+            );
+        interaction.options.getString
+            .calledWith('bachelorthesislink')
+            .mockReturnValue('https://dspace.vutbr.cz/handle/11012/2223121');
+        jest.spyOn(utils, 'scrapeThesis').mockReturnValue(
+            Promise.resolve(nameUser)
+        );
+        jest.spyOn(utils, 'scrapeConfirmationStudies').mockReturnValue(
+            Promise.resolve(dict)
+        );
+        if (interaction.guild) {
+            interaction.guild.roles.cache.find.mockReturnValue(
+                'test' as unknown as Role
+            );
+        }
+        await verify.execute(interaction);
+        expect(interaction.editReply).toHaveBeenCalledWith({
+            content:
+                'User already verified! Contact admin if you need to verify again.',
+        });
+    });
+
+    it('Verified user was banned verification should fail', async () => {
+        prismaMock.users.findMany.mockResolvedValue([databaseRemovedUser]);
+        interaction.user.id = '1234';
         interaction.options.getString
             .calledWith('linktoconfirmationmuni')
             .mockReturnValue(

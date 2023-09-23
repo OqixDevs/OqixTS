@@ -1,5 +1,6 @@
 import { Client, GatewayIntentBits } from 'discord.js';
 import {
+    actionListener,
     channelListener,
     interactionListener,
     pinVoteListener,
@@ -23,6 +24,8 @@ export default () => {
             GatewayIntentBits.Guilds,
             GatewayIntentBits.GuildMessages,
             GatewayIntentBits.GuildMessageReactions,
+            GatewayIntentBits.GuildMembers,
+            GatewayIntentBits.GuildModeration,
         ],
     });
     client.login(token);
@@ -34,6 +37,7 @@ export default () => {
         }
     });
 
+    actionListener(client);
     interactionListener(client);
     channelListener(client);
     pinVoteListener(client);

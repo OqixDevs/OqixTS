@@ -60,7 +60,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             content: 'Verification failed! Contact admin.',
         });
     }
-    if (user.length != 0) {
+    if (user.length != 0 && user[0].status !== 'removed') {
         return interaction.editReply({
             content:
                 'User already verified! Contact admin if you need to verify again.',
@@ -78,7 +78,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             content: 'Verification failed! Contact admin.',
         });
     }
-    if (user.length != 0) {
+    if (user.length != 0 && user[0].status !== 'removed') {
         return interaction.editReply({
             content: 'This thesis is already used! Please contact admin.',
         });
@@ -100,6 +100,20 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         });
     }
 
+    if (user[0]?.status === 'removed') {
+        try {
+            await prisma.users.delete({
+                where: {
+                    id: user[0].id,
+                },
+            });
+        } catch (err) {
+            console.log(`Database error: ${err}`);
+            return interaction.editReply({
+                content: 'Verification failed! Contact admin.',
+            });
+        }
+    }
     const roleProgramm = await assignRole(
         interaction,
         scrapedConfirmationStudy,
