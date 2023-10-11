@@ -1,0 +1,16 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource database {
+  provider = "mongodb"
+  url      = env("DATABASE_CONNECTION_STRING")
+}
+
+model Users {
+  id       String  @id @default(auto()) @map("_id") @database.ObjectId
+  discordId      String  @map("id")
+  idThesis String?
+  status   String
+  joinDate DateTime? @default(now())
+}

@@ -1,7 +1,7 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 import { sanitizeUrl } from '@braintree/sanitize-url';
 import { assignRole, scrapeConfirmationStudies, scrapeThesis } from '../utils';
-import * as fs from 'fs';
+import { prisma } from '../model';
 
 /**
  * Takes URL to confirmation of studies and thesis and if the data scraped from websites are correct verifies user with role.
@@ -28,14 +28,6 @@ export const data = new SlashCommandBuilder()
     );
 
 export async function execute(interaction: ChatInputCommandInteraction) {
-    let userLog = undefined;
-    try {
-        userLog = fs.readFileSync('./userLog.json', 'utf8');
-    } catch (e) {
-        fs.writeFileSync('./userLog.json', '[]');
-        userLog = fs.readFileSync('./userLog.json', 'utf8');
-    }
-    const userLogJSON = JSON.parse(userLog);
     const idConfirmationMuni = interaction.options.getString(
         'linktoconfirmationmuni'
     );
@@ -50,42 +42,78 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const idConfirmationMuniParsedUrl = new URL(
         sanitizeUrl(idConfirmationMuni)
     );
-    for (const key in userLogJSON) {
-        if (interaction.user.id === userLogJSON[key].id) {
-            return interaction.reply({
-                content:
-                    'User already verified! Contact admin if you need to verify again.',
-                ephemeral: true,
-            });
-        } else if (
-            userLogJSON[key].idThesis ===
-            bachelorThesisParsedUrl.pathname.split('/')[3]
-        ) {
-            return interaction.reply({
-                content: 'This thesis is already used! Please contact admin.',
-                ephemeral: true,
-            });
-        }
+
+    await interaction.reply({
+        content: 'Verifying, wait please...',
+        ephemeral: true,
+    });
+    let user;
+    try {
+        user = await prisma.users.findMany({
+            where: {
+                discordId: interaction.user.id,
+            },
+        });
+    } catch (err) {
+        console.log(`Database error: ${err}`);
+        return interaction.editReply({
+            content: 'Verification failed! Contact admin.',
+        });
+    }
+    if (user.length != 0 && user[0].status !== 'removed') {
+        return interaction.editReply({
+            content:
+                'User already verified! Contact admin if you need to verify again.',
+        });
+    }
+    try {
+        user = await prisma.users.findMany({
+            where: {
+                idThesis: bachelorThesisParsedUrl.pathname.split('/')[3],
+            },
+        });
+    } catch (err) {
+        console.log(`Database error: ${err}`);
+        return interaction.editReply({
+            content: 'Verification failed! Contact admin.',
+        });
+    }
+    if (user.length != 0 && user[0].status !== 'removed') {
+        return interaction.editReply({
+            content: 'This thesis is already used! Please contact admin.',
+        });
     }
     const authorName = await scrapeThesis(bachelorThesisParsedUrl.pathname);
     if (!authorName) {
-        return interaction.reply({
+        return interaction.editReply({
             content:
                 'Could not get the author name. Maybe thesis URL is wrong or the website did not respond.',
-            ephemeral: true,
         });
     }
     const scrapedConfirmationStudy = await scrapeConfirmationStudies(
         idConfirmationMuniParsedUrl.pathname
     );
     if (!scrapedConfirmationStudy) {
-        return interaction.reply({
+        return interaction.editReply({
             content:
                 'Could not get infromation from the confirmation of studies. Maybe confirmation of studies URL is wrong or the website did not respond.',
-            ephemeral: true,
         });
     }
 
+    if (user[0]?.status === 'removed') {
+        try {
+            await prisma.users.delete({
+                where: {
+                    id: user[0].id,
+                },
+            });
+        } catch (err) {
+            console.log(`Database error: ${err}`);
+            return interaction.editReply({
+                content: 'Verification failed! Contact admin.',
+            });
+        }
+    }
     const roleProgramm = await assignRole(
         interaction,
         scrapedConfirmationStudy,
@@ -93,17 +121,15 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         bachelorThesisParsedUrl
     );
     if (roleProgramm) {
-        return interaction.reply({
+        return interaction.editReply({
             content:
                 'You have been successfully verified with role ' +
                 roleProgramm.name +
                 '.',
-            ephemeral: true,
         });
     }
-    return interaction.reply({
+    return interaction.editReply({
         content:
             'Verification failed check if you entered the correct information or contact admin.',
-        ephemeral: true,
     });
 }

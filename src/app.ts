@@ -1,5 +1,6 @@
 import { Client, GatewayIntentBits } from 'discord.js';
 import {
+    actionListener,
     channelListener,
     interactionListener,
     pinVoteListener,
@@ -15,12 +16,16 @@ import { SubjectChannels } from './utils';
 export default () => {
     dotenv.config();
     const token = process.env.DISCORD_TOKEN; // add your token here
+
     console.log('Bot is starting...');
+
     const client = new Client({
         intents: [
             GatewayIntentBits.Guilds,
             GatewayIntentBits.GuildMessages,
             GatewayIntentBits.GuildMessageReactions,
+            GatewayIntentBits.GuildMembers,
+            GatewayIntentBits.GuildModeration,
         ],
     });
     client.login(token);
@@ -32,6 +37,7 @@ export default () => {
         }
     });
 
+    actionListener(client);
     interactionListener(client);
     channelListener(client);
     pinVoteListener(client);

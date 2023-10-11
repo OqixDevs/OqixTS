@@ -1,5 +1,5 @@
 import { CommandInteraction, GuildMember } from 'discord.js';
-import * as fs from 'fs';
+import { prisma } from '../model';
 
 interface Dictionary<T> {
     [Key: string]: T;
@@ -25,14 +25,6 @@ export async function assignRole(
     authorName: string,
     bachelorThesisParsedUrl: URL
 ) {
-    let userLog = undefined;
-    try {
-        userLog = fs.readFileSync('./userLog.json', 'utf8');
-    } catch (e) {
-        fs.writeFileSync('./userLog.json', '[]');
-        userLog = fs.readFileSync('./userLog.json', 'utf8');
-    }
-    const userLogJSON = JSON.parse(userLog);
     const today = new Date();
     if (
         scrapedConfirmationStudy[
@@ -59,12 +51,19 @@ export async function assignRole(
                     programme_roles[scrapedConfirmationStudy['Programme']]
             );
             const member = interaction.member as GuildMember;
-            userLogJSON.push({
-                id: interaction.user.id,
-                idThesis: bachelorThesisParsedUrl.pathname.split('/')[3],
-                status: 'verified',
-            });
-            fs.writeFileSync('./userLog.json', JSON.stringify(userLogJSON));
+            try {
+                await prisma.users.create({
+                    data: {
+                        discordId: interaction.user.id,
+                        idThesis:
+                            bachelorThesisParsedUrl.pathname.split('/')[3],
+                        status: 'verified',
+                    },
+                });
+            } catch (err) {
+                console.log(`Database error: ${err}`);
+                return undefined;
+            }
             if (roleVerified && roleProgramm) {
                 member.roles.add(roleVerified);
                 member.roles.add(roleProgramm);
