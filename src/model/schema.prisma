@@ -14,3 +14,13 @@ model Users {
   status   String
   joinDate DateTime? @default(now())
 }
+
+model Reviews {
+  id       String  @id @default(auto()) @map("_id") @database.ObjectId
+  subjectCode String
+  reviewText String
+  discordUserId String
+  positiveRating Int @default(0)
+  negativeRating Int @default(0)
+  dateReview DateTime @default(now())
+}
