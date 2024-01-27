@@ -50,3 +50,4 @@ jobs:
           GUILD_ID: ${{ secrets.GUILD_ID }}
           SSH_KEY: ${{ secrets.SSH_KEY }}
           KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
+          DATABASE_CONNECTION_STRING: ${{ secrets.DATABASE_CONNECTION_STRING }}

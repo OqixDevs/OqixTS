@@ -13,6 +13,7 @@ runs:
         GUILD_ID: ${{ inputs.GUILD_ID }}
         SSH_KEY: ${{ inputs.SSH_KEY }}
         KNOWN_HOSTS: ${{ inputs.KNOWN_HOSTS }}
+        DATABASE_CONNECTION_STRING: ${{ inputs.DATABASE_CONNECTION_STRING }}
       shell: bash
       run: |
         echo "Log in to docker..."
