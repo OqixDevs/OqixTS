@@ -13,6 +13,7 @@ runs:
         GUILD_ID: ${{ inputs.GUILD_ID }}
         SSH_KEY: ${{ inputs.SSH_KEY }}
         KNOWN_HOSTS: ${{ inputs.KNOWN_HOSTS }}
+        DATABASE_CONNECTION_STRING: ${{ inputs.DATABASE_CONNECTION_STRING }}
       shell: bash
       run: |
         echo "Log in to docker..."
@@ -23,4 +24,4 @@ runs:
         mkdir ~/.ssh
         echo $KNOWN_HOSTS >> ~/.ssh/known_hosts
         echo "Connect to VM and start app..."
-        ssh -i ~/vm_key.key $ADDRESS_VM "cd /app && " 'docker kill $(sudo docker ps -a -q); docker rm $(docker ps --filter status=exited -q);' "docker run -d -e DISCORD_TOKEN=$DISCORD_TOKEN -e CLIENT_ID=$CLIENT_ID -e GUILD_ID=$GUILD_ID -it --mount type=bind,source=/app/userLog.json,target=/root/userLog.json --mount type=bind,source=/app/config.json,target=/root/config.json mimotej/oqix:latest"
+        ssh -i ~/vm_key.key $ADDRESS_VM "cd /app && " 'docker kill $(sudo docker ps -a -q); docker rm $(docker ps --filter status=exited -q);' "docker run -d -e DISCORD_TOKEN=$DISCORD_TOKEN -e CLIENT_ID=$CLIENT_ID -e GUILD_ID=$GUILD_ID -e DATABASE_CONNECTION_STRING=$DATABASE_CONNECTION_STRING -it --mount type=bind,source=/app/userLog.json,target=/root/userLog.json --mount type=bind,source=/app/config.json,target=/root/config.json mimotej/oqix:latest"
