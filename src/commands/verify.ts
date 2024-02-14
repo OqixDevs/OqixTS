@@ -67,9 +67,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         });
     }
     try {
+        let thesisId = bachelorThesisParsedUrl.pathname.split('/')[3];
+        if (thesisId === undefined) {
+            thesisId = bachelorThesisParsedUrl.pathname.split('/')[2];
+        }
         user = await prisma.users.findMany({
             where: {
-                idThesis: bachelorThesisParsedUrl.pathname.split('/')[3],
+                idThesis: thesisId,
             },
         });
     } catch (err) {

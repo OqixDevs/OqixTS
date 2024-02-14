@@ -15,8 +15,11 @@ export async function scrapeThesis(bachelorThesisPath: string) {
     }
     const $ = load(response.data);
     const authorName = $(
-        '#aspect_artifactbrowser_ItemViewer_div_item-view > div > div.row > div.col-sm-4 > div:nth-child(2) > div > a'
+        'ds-metadata-representation-list.ds-item-page-mixed-author-field:nth-child(4) > ds-metadata-field-wrapper:nth-child(1) > div:nth-child(1) > div:nth-child(2) > ds-metadata-representation-loader:nth-child(1) > ds-plain-text-metadata-list-element:nth-child(1) > div:nth-child(1) > a:nth-child(1)'
     ).text();
-
-    return authorName.split(',').reverse().join(' ');
+    return authorName
+        .split(',')
+        .reverse()
+        .map((name) => name.trim())
+        .join(' ');
 }

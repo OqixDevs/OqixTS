@@ -52,11 +52,14 @@ export async function assignRole(
             );
             const member = interaction.member as GuildMember;
             try {
+                let idThesis = bachelorThesisParsedUrl.pathname.split('/')[3];
+                if (idThesis === undefined) {
+                    idThesis = bachelorThesisParsedUrl.pathname.split('/')[2];
+                }
                 await prisma.users.create({
                     data: {
                         discordId: interaction.user.id,
-                        idThesis:
-                            bachelorThesisParsedUrl.pathname.split('/')[3],
+                        idThesis: idThesis,
                         status: 'verified',
                     },
                 });
