@@ -49,6 +49,9 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     });
     let user;
     try {
+        console.log(
+            `LOG: Checking if user ${interaction.user.id} is already registered.`
+        );
         user = await prisma.users.findMany({
             where: {
                 discordId: interaction.user.id,
@@ -71,6 +74,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         if (thesisId === undefined) {
             thesisId = bachelorThesisParsedUrl.pathname.split('/')[2];
         }
+        console.log(`LOG: Checking if thesis ${thesisId} exists in database.`);
         user = await prisma.users.findMany({
             where: {
                 idThesis: thesisId,

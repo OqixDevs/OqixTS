@@ -26,6 +26,7 @@ export async function assignRole(
     bachelorThesisParsedUrl: URL
 ) {
     const today = new Date();
+    console.log('LOG: Assigning role to user.');
     if (
         scrapedConfirmationStudy[
             'Status of studies as of ' +
@@ -56,6 +57,9 @@ export async function assignRole(
                 if (idThesis === undefined) {
                     idThesis = bachelorThesisParsedUrl.pathname.split('/')[2];
                 }
+                console.log(
+                    `LOG: Creating user in database with thesis ${idThesis}.`
+                );
                 await prisma.users.create({
                     data: {
                         discordId: interaction.user.id,
@@ -67,6 +71,7 @@ export async function assignRole(
                 console.log(`Database error: ${err}`);
                 return undefined;
             }
+            console.log(`LOG: Assigning role to user ${interaction.user.id}.`);
             if (roleVerified && roleProgramm) {
                 member.roles.add(roleVerified);
                 member.roles.add(roleProgramm);
