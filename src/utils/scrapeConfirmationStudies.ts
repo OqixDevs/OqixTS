@@ -16,7 +16,7 @@ export async function scrapeConfirmationStudies(pathname: string) {
     }
     const $ = load(response.data);
     const userInfo = $(
-        '#el_potvrzeni > div.column.small-12.medium-9.large-9 > div'
+        '#el_potvrzeni > div.column.small-12.medium-8.large-8 > div'
     );
     const children = userInfo
         .children()
