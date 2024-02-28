@@ -55,11 +55,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         const userId = interaction.user.id;
         const textReview = interaction.options.getString('text');
         if (textReview == undefined || subjectCode == undefined) {
-            console.log('Error with arguments for create review command.');
+            console.log('LOG: Error with arguments for create review command.');
             return interaction.editReply({
                 content: `Error while creating a review for ${subjectCode}.`,
             });
         }
+        console.log(
+            `LOG: Checking if user ${userId} has already submitted review for ${subjectCode}.`
+        );
         const existingReview = await prisma.reviews.findMany({
             where: {
                 discordUserId: {
@@ -70,13 +73,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 },
             },
         });
-        console.log(existingReview);
         if (existingReview.length != 0) {
             return interaction.editReply({
                 content: `You have already submitted review from subject ${subjectCode}.`,
             });
         }
         try {
+            console.log(`LOG: Creating review for subject ${subjectCode}.`);
             await prisma.reviews.create({
                 data: {
                     discordUserId: userId,
@@ -85,7 +88,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 },
             });
         } catch (err) {
-            console.log(`Database error: ${err}`);
+            console.log(`LOG: Database error: ${err}`);
             return interaction.editReply({
                 content: `Error while creating a review for ${subjectCode}.`,
             });
@@ -102,11 +105,17 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 subjectCode: subjectCode?.toUpperCase(),
             },
         });
+        console.log(
+            `LOG: Submitted reviews for ${subjectCode}: ${submittedReviews}.`
+        );
         if (submittedReviews.length == 0) {
             return interaction.editReply({
                 content: `No reviews for ${subjectCode?.toUpperCase()} :(`,
             });
         }
+        console.log(
+            `LOG: Building embed for review ${submittedReviews[0].id}.`
+        );
         const title = `Reviews for course ${subjectCode}`;
         const reviewer = await interaction.client.users.fetch(
             submittedReviews[0].discordUserId
