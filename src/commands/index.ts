@@ -11,3 +11,4 @@ export * as channelmanagement from './channelmanagement';
 export * as edit from './edit';
 export * as channelrole from './channelrole';
 export * as review from './review';
+export * as graduate from './graduate';
