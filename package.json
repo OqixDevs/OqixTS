@@ -29,18 +29,18 @@
   },
   "homepage": "https://github.com/OqixDevs/OqixTS#readme",
   "dependencies": {
-    "@discordjs/rest": "2.0.1",
-    "@prisma/client": "5.4.0",
-    "discord-api-types": "0.37.59",
-    "discord.js": "14.13.0",
-    "dotenv": "16.3.1",
+    "@discordjs/rest": "2.2.0",
+    "@prisma/client": "5.11.0",
+    "discord-api-types": "0.37.74",
+    "discord.js": "14.14.1",
+    "dotenv": "16.4.5",
     "jest-mock-extended": "3.0.5"
   },
   "devDependencies": {
     "@braintree/sanitize-url": "6.0.4",
-    "@types/cheerio": "0.22.32",
-    "@types/jest": "29.5.5",
-    "@types/node": "18.18.3",
+    "@types/cheerio": "0.22.35",
+    "@types/jest": "29.5.12",
+    "@types/node": "18.19.24",
     "@typescript-eslint/eslint-plugin": "6.7.4",
     "@typescript-eslint/parser": "6.7.4",
     "axios": "1.5.1",
@@ -48,13 +48,13 @@
     "eslint": "8.50.0",
     "jest": "29.7.0",
     "prettier": "3.0.3",
-    "prisma": "5.4.0",
-    "ts-jest": "29.1.1",
-    "ts-node": "10.9.1",
-    "typescript": "5.2.2"
+    "prisma": "5.11.0",
+    "ts-jest": "29.1.2",
+    "ts-node": "10.9.2",
+    "typescript": "5.4.2"
   },
   "optionalDependencies": {
-    "nodemon": "3.0.1"
+    "nodemon": "3.1.0"
   },
   "prisma": {
     "schema": "src/model/schema.prisma"
