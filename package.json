@@ -37,7 +37,7 @@
     "jest-mock-extended": "3.0.5"
   },
   "devDependencies": {
-    "@braintree/sanitize-url": "6.0.4",
+    "@braintree/sanitize-url": "7.0.0",
     "@types/cheerio": "0.22.35",
     "@types/jest": "29.5.12",
     "@types/node": "18.19.24",
