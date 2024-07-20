@@ -12,7 +12,14 @@ export async function scrapeThesis(bachelorThesisPath: string) {
         );
     } catch (e) {
         console.debug(e);
-        return null;
+        try {
+            response = await axios.get(
+                'https://hdl.handle.net' + bachelorThesisPath
+            );
+        } catch (error) {
+            console.debug(error);
+            return null;
+        }
     }
     const $ = load(response.data);
     console.log('LOG: Parsing author name from the page.');
