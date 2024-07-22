@@ -22,7 +22,7 @@ export const data = new SlashCommandBuilder()
         option
             .setName('bachelorthesislink')
             .setDescription(
-                'Thesis link at Dspace (example URL: https://dspace.vutbr.cz/handle/11012/478521)'
+                'Thesis link at Dspace (example URL: https://dspace.vutbr.cz/handle/cby7-11b-4d4-9f79f-d98bee82)'
             )
             .setRequired(true)
     );
