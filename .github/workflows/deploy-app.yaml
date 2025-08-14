@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Install dependencies
         uses: ./.github/actions/build
       - name: Test
@@ -25,7 +25,7 @@ jobs:
     needs: pre-run
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Prepare image
         uses: ./.github/actions/prepare-image
         with:
@@ -38,7 +38,7 @@ jobs:
     needs: setup-image
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Deploy app
         uses: ./.github/actions/deploy-app
         with:
