@@ -21,7 +21,7 @@ export default (client: Client) => {
                 const notifyChannel = await client.channels.fetch(
                     config.NewChannelNotificationChannel
                 );
-                if (notifyChannel?.isTextBased()) {
+                if (notifyChannel?.isSendable()) {
                     await notifyChannel.send({
                         content: `New course channel created \`#${channel.name}\``,
                     });

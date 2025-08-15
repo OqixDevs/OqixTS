@@ -2,6 +2,7 @@ import { PermissionFlagsBits } from 'discord-api-types/v9';
 import {
     ChatInputCommandInteraction,
     GuildMemberRoleManager,
+    MessageFlags,
     NonThreadGuildBasedChannel,
     SlashCommandBuilder,
 } from 'discord.js';
@@ -36,7 +37,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     ) {
         await interaction.reply({
             content: `This channel has no special role`,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
@@ -66,7 +67,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         if (!canCreate) {
             await interaction.reply({
                 content: `You cannot create roles in this channel`,
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
             return;
         }
@@ -80,26 +81,26 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
             await interaction.reply({
                 content: `\`${subjectCode}\` role created`,
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
             return;
         } else {
             await interaction.reply({
                 content: `\`${subjectCode}\` role already exists`,
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
             return;
         }
     } else {
         await interaction.reply({
             content: `This channel has no special role`,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
 
     await interaction.reply({
         content: `${action} role \`${subjectCode}\``,
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
     });
 }

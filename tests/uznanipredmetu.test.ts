@@ -1,5 +1,5 @@
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
-import { ChatInputCommandInteraction } from 'discord.js';
+import { ChatInputCommandInteraction, MessageFlags } from 'discord.js';
 import { uznanipredmetu } from '../src/commands';
 
 describe('Tests for uznanipredmetu command', () => {
@@ -87,7 +87,7 @@ describe('Tests for uznanipredmetu command', () => {
         uznanipredmetu.execute(interaction);
         expect(interaction.reply).toHaveBeenCalledWith({
             content: 'You need to provide positive values.',
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
     });
 
@@ -106,7 +106,7 @@ describe('Tests for uznanipredmetu command', () => {
         uznanipredmetu.execute(interaction);
         expect(interaction.reply).toHaveBeenCalledWith({
             content: 'You need to provide positive values.',
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
     });
 
@@ -125,7 +125,7 @@ describe('Tests for uznanipredmetu command', () => {
         uznanipredmetu.execute(interaction);
         expect(interaction.reply).toHaveBeenCalledWith({
             content: 'You need to provide positive values.',
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
     });
 });

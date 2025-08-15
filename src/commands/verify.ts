@@ -1,7 +1,12 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
+import {
+    ChatInputCommandInteraction,
+    MessageFlags,
+    SlashCommandBuilder,
+} from 'discord.js';
 import { sanitizeUrl } from '@braintree/sanitize-url';
 import { assignRole, scrapeConfirmationStudies, scrapeThesis } from '../utils';
 import { prisma } from '../model';
+import { logger } from '../logger';
 
 /**
  * Takes URL to confirmation of studies and thesis and if the data scraped from websites are correct verifies user with role.
@@ -35,7 +40,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (!idConfirmationMuni || !bachelorThesis) {
         return interaction.reply({
             content: 'One of the arguments was not entered!',
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
     }
     const bachelorThesisParsedUrl = new URL(sanitizeUrl(bachelorThesis));
@@ -45,12 +50,12 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     await interaction.reply({
         content: 'Verifying, wait please...',
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
     });
     let user;
     try {
-        console.log(
-            `LOG: Checking if user ${interaction.user.id} is already registered.`
+        logger.info(
+            `Checking if user ${interaction.user.id} is already registered.`
         );
         user = await prisma.users.findMany({
             where: {
@@ -58,7 +63,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             },
         });
     } catch (err) {
-        console.log(`Database error: ${err}`);
+        logger.error(`Database error: ${err}`);
         return interaction.editReply({
             content: 'Verification failed! Contact admin.',
         });
@@ -74,14 +79,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         if (thesisId === undefined) {
             thesisId = bachelorThesisParsedUrl.pathname.split('/')[2];
         }
-        console.log(`LOG: Checking if thesis ${thesisId} exists in database.`);
+        logger.info(`Checking if thesis ${thesisId} exists in database.`);
         user = await prisma.users.findMany({
             where: {
                 idThesis: thesisId,
             },
         });
     } catch (err) {
-        console.log(`Database error: ${err}`);
+        logger.error(`Database error: ${err}`);
         return interaction.editReply({
             content: 'Verification failed! Contact admin.',
         });
@@ -116,7 +121,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 },
             });
         } catch (err) {
-            console.log(`Database error: ${err}`);
+            logger.info(`Database error: ${err}`);
             return interaction.editReply({
                 content: 'Verification failed! Contact admin.',
             });

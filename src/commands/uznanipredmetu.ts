@@ -1,4 +1,9 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+import {
+    ChatInputCommandInteraction,
+    MessageFlags,
+    SlashCommandBuilder,
+} from 'discord.js';
 
 /**
  * Tells user if he gets credits from FIT course at FI.
@@ -40,14 +45,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (!fiCourseCredits || !fitTotalCredits || !fitTotalSemesters) {
         return interaction.reply({
             content: 'You need to input a positive integer.',
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
     }
 
     if (fiCourseCredits < 0 || fitTotalCredits < 0 || fitTotalSemesters < 0) {
         return interaction.reply({
             content: 'You need to provide positive values.',
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
     }
     const neededCredits = 30 * fitTotalSemesters;

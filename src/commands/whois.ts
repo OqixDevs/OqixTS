@@ -1,5 +1,9 @@
 import { PermissionFlagsBits } from 'discord-api-types/v9';
-import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
+import {
+    ChatInputCommandInteraction,
+    MessageFlags,
+    SlashCommandBuilder,
+} from 'discord.js';
 
 /**
  * Returns available information about user.
@@ -23,11 +27,11 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             content: `Info about user ${user.username}:
     tag: ${user.tag}
     user ID: ${user.id}`,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
     }
     return interaction.reply({
         content: 'You need to input a user.',
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
     });
 }

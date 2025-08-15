@@ -18,15 +18,15 @@ repos:
         args: [--allow-multiple-documents]
 
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v9.7.0
+    rev: v9.33.0
     hooks:
       - id: eslint
         additional_dependencies:
-          - "eslint@8.13.0"
-          - "@typescript-eslint/eslint-plugin@5.19.0"
-          - "@typescript-eslint/parser@5.19.0"
-          - "eslint-config-prettier@8.5.0"
-          - "typescript@4.6.3"
+          - "eslint@9.32.0"
+          - "@typescript-eslint/eslint-plugin@8.39.0"
+          - "@typescript-eslint/parser@8.39.0"
+          - "eslint-config-prettier@10.1.8"
+          - "typescript@5.9.2"
 
   - repo: https://github.com/pre-commit/mirrors-prettier
     rev: v4.0.0-alpha.8

@@ -1,4 +1,8 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
+import {
+    ChatInputCommandInteraction,
+    MessageFlags,
+    SlashCommandBuilder,
+} from 'discord.js';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
 
 /**
@@ -20,28 +24,33 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (!message) {
         return interaction.reply({
             content: 'You need to input a message.',
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
     }
 
     if (message.length > 2000) {
         return interaction.reply({
             content: 'Message is too long.',
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
     }
 
-    return interaction.channel
-        ?.send(message)
-        .then(() =>
-            interaction.reply({ content: 'Message sent', ephemeral: true })
-        )
-        .catch((error: unknown) => {
-            console.error(error);
-            interaction.reply({
-                content:
-                    'There was an error trying to announce in this channel!',
-                ephemeral: true,
+    if (interaction.channel?.isSendable()) {
+        return interaction.channel
+            ?.send(message)
+            .then(() =>
+                interaction.reply({
+                    content: 'Message sent',
+                    flags: MessageFlags.Ephemeral,
+                })
+            )
+            .catch((error: unknown) => {
+                console.error(error);
+                interaction.reply({
+                    content:
+                        'There was an error trying to announce in this channel!',
+                    flags: MessageFlags.Ephemeral,
+                });
             });
-        });
+    }
 }

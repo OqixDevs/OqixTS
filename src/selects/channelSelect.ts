@@ -7,6 +7,7 @@ import {
     TextChannel,
     GuildMemberRoleManager,
 } from 'discord.js';
+import { logger } from '../logger';
 
 export type SelectID = {
     id: string;
@@ -26,6 +27,7 @@ export async function execute(interaction: SelectMenuInteraction) {
     for (const selectedChannelId of interaction.values) {
         const channel =
             interaction.guild?.channels.cache.get(selectedChannelId);
+        logger.info(`Adding channel ${channel}`);
         if (channel) {
             const textChannel = channel as TextChannel;
             const userPermissions = textChannel.permissionsFor(
@@ -40,9 +42,13 @@ export async function execute(interaction: SelectMenuInteraction) {
             const subjectRole = interaction.guild?.roles.cache.find(
                 (r) => r.name == subjectCode
             );
+            logger.info(
+                `User has already access: ${userCanRead} and role ${subjectRole}`
+            );
             const roleManager = interaction.member
                 .roles as GuildMemberRoleManager;
             if (userCanRead) {
+                logger.info(`Removing access to channel ${textChannel.name}`);
                 await textChannel.permissionOverwrites.delete(
                     interaction.member.user.id
                 );
@@ -50,6 +56,7 @@ export async function execute(interaction: SelectMenuInteraction) {
                     await roleManager.member.roles.remove(subjectRole);
                 }
             } else {
+                logger.info(`Giving access to channel ${textChannel.name}`);
                 await textChannel.permissionOverwrites.create(
                     interaction.member.user.id,
                     {

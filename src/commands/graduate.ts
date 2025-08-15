@@ -1,8 +1,10 @@
 import {
     ChatInputCommandInteraction,
     GuildMemberRoleManager,
+    MessageFlags,
     SlashCommandBuilder,
 } from 'discord.js';
+import { logger } from '../logger';
 
 /**
  * Gives 'graduate' role to the user that already has role 'verified'.
@@ -25,13 +27,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (!interaction.member) {
         return interaction.reply({
             content: 'Error: User not recognized.',
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
     }
     if (!interaction.guild) {
         return interaction.reply({
             content: 'Error: Server not recognized.',
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
     }
 
@@ -42,13 +44,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         return interaction.reply({
             content:
                 'You did not confirm the action to get this role. Read the description again.',
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
     }
 
     await interaction.reply({
         content: 'Processing, wait please...',
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
     });
 
     const isVerified = usersRoles.cache.some(
@@ -59,8 +61,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     );
 
     if (!isVerified) {
-        console.log(
-            `LOG: User ${interaction.user.id} tried to get the the role 'graduate, but is not yet even verified.`
+        logger.info(
+            `User ${interaction.user.id} tried to get the the role 'graduate, but is not yet even verified.`
         );
         return interaction.editReply({
             content:
@@ -69,8 +71,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     }
 
     if (isGraduate) {
-        console.log(
-            `LOG: User ${interaction.user.id} tried to get the the role 'graduate, but already has it.`
+        logger.info(
+            `User ${interaction.user.id} tried to get the the role 'graduate, but already has it.`
         );
         return interaction.editReply({
             content: 'You already have this role.',
@@ -78,8 +80,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     }
 
     try {
-        console.log(
-            `LOG: Adding 'graduate' role to the user ${interaction.user.id}.`
+        logger.info(
+            `Adding 'graduate' role to the user ${interaction.user.id}.`
         );
         const graduateRole = interaction.guild.roles.cache.find(
             (role) => role.name === 'graduate'
@@ -90,14 +92,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 content: 'Congratulations, you are a graduate now.',
             });
         } else {
-            console.log(`FAIL: 'Graduate' role not found.`);
+            logger.info(`'Graduate' role not found.`);
             return interaction.editReply({
                 content: 'Adding role failed. Try again or contact admin.',
             });
         }
     } catch (err) {
-        console.log(
-            `FAIL: Could not add 'graduate' role to the user ${interaction.user.id}.\n${err}`
+        logger.error(
+            `Could not add 'graduate' role to the user ${interaction.user.id}.\n${err}`
         );
         return interaction.editReply({
             content: 'Adding role failed. Try again or contact admin.',

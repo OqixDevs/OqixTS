@@ -3,6 +3,7 @@ import {
     SlashCommandBuilder,
     GuildMember,
     TextBasedChannel,
+    MessageFlags,
 } from 'discord.js';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
 import { Embed } from '../utils';
@@ -43,7 +44,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         // this is impossible, all options are set as required
         interaction.reply({
             content: `Some option not specified.`,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
@@ -54,7 +55,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         if (!fetchedChannel || !fetchedChannel.isTextBased()) {
             interaction.reply({
                 content: `Channel ID \`${channelId}\` not found or is not a text channel`,
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
             return;
         }
@@ -67,7 +68,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (!message) {
         interaction.reply({
             content: `Message ID \`${messageId}\` in Channel ID \`${channelId}\` not found.`,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
@@ -75,7 +76,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (interaction.client.user?.id != message.author.id) {
         interaction.reply({
             content: `Message ID \`${messageId}\` in Channel ID \`${channelId}\` does not belong to the bot!`,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
@@ -83,7 +84,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (!message.editable) {
         interaction.reply({
             content: `Message ID \`${messageId}\` in Channel ID \`${channelId}\` is not editable.`,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
@@ -104,6 +105,6 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     await interaction.reply({
         embeds: [embed],
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
     });
 }

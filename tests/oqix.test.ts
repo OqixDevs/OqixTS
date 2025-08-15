@@ -10,6 +10,6 @@ describe('Tests for oqix command', () => {
 
     it('Calling execute should call reply', () => {
         oqix.execute(interaction);
-        expect(interaction.reply).toHaveBeenCalled;
+        expect(interaction.reply).toHaveBeenCalled();
     });
 });

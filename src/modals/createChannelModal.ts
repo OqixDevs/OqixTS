@@ -6,6 +6,7 @@ import {
     ModalSubmitInteraction,
     TextInputStyle,
 } from 'discord.js';
+import { logger } from '../logger';
 
 /**
  * Modal for creating new channels
@@ -33,7 +34,7 @@ export async function execute(interaction: ModalSubmitInteraction) {
         interaction.fields.getTextInputValue('channelDescription');
 
     // Create new channel, or assign it if user is trying to create existing channel
-    console.log({ channelName, channelDescription });
+    logger.info({ channelName, channelDescription });
 
     interaction.reply({
         content: `Created a new channel ${channelName}`,

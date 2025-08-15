@@ -1,4 +1,5 @@
 import { Client, MessageReaction } from 'discord.js';
+import { logger } from '../logger';
 
 /**
  * Listens for interaction events and calls the appropriate function.
@@ -43,14 +44,14 @@ export default (client: Client) => {
                                 }
                                 message.pin();
                             } catch (error) {
-                                console.log('Unable to pin/unpin message:');
-                                console.log(error);
+                                logger.info('Unable to pin/unpin message:');
+                                logger.info(error);
                             }
                         });
                 }
             });
         } catch (error) {
-            console.log(error);
+            logger.info(error);
         }
     });
 };
