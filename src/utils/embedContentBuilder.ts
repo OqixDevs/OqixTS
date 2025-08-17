@@ -1,6 +1,7 @@
 import { ButtonInteraction } from 'discord.js';
 import { Review } from './Review';
 import { prisma } from '../model';
+import { logger } from '../logger';
 
 export async function embedContentBuilder(
     interaction: ButtonInteraction,
@@ -49,6 +50,6 @@ export async function embedContentBuilder(
             return review;
         }
     }
-    console.log('Error occured while processing reviews.');
+    logger.info('Error occurred while processing reviews.');
     return undefined;
 }

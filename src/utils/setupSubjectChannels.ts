@@ -9,6 +9,7 @@ import { addChannel } from '../buttons';
 import { channelSelect } from '../selects';
 import { SelectID } from '../selects/channelSelect';
 import { Config } from './config';
+import { logger } from '../logger';
 
 export type ChannelGroups = {
     group: {
@@ -48,7 +49,7 @@ export class SubjectChannels {
         let selectIndex = 0;
 
         if (Config.Instance.Properties.SubjectChannelGroupIDs.length > 5) {
-            console.log('Attempting to set up for more than 5 categories');
+            logger.info('Attempting to set up for more than 5 categories');
             return;
         }
 
@@ -65,7 +66,7 @@ export class SubjectChannels {
                 categoryChannels.size < 1
             ) {
                 // we don't have a channel group or it's empty
-                console.log(
+                logger.info(
                     `Channel Group ID ${channelGroupId} is either not a group, or is empty`
                 );
                 continue;

@@ -1,4 +1,4 @@
-import { Client } from 'discord.js';
+import { Client, MessageFlags } from 'discord.js';
 import * as commandsModule from '.././commands';
 import * as buttonsModule from '.././buttons';
 import * as selectsModule from '.././selects';
@@ -33,7 +33,7 @@ export default (client: Client) => {
                 await interaction.reply({
                     content:
                         'There was an error while executing this interaction!',
-                    ephemeral: true,
+                    flags: MessageFlags.Ephemeral,
                 });
             }
         }

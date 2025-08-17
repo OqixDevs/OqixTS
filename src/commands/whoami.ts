@@ -1,6 +1,7 @@
 import {
     ChatInputCommandInteraction,
     GuildMember,
+    MessageFlags,
     SlashCommandBuilder,
 } from 'discord.js';
 
@@ -21,6 +22,6 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     joined on: ${member.joinedAt?.getDate().toString()}/${member.joinedAt
         ?.getMonth()
         .toString()}/${member.joinedAt?.getFullYear().toString()}`,
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
     });
 }

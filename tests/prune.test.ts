@@ -5,6 +5,7 @@ import {
     GuildTextBasedChannel,
     Message,
     ChannelType,
+    MessageFlags,
 } from 'discord.js';
 import { prune } from '../src/commands';
 
@@ -35,7 +36,7 @@ describe('Tests for prune command', () => {
         prune.execute(interaction);
         expect(interaction.reply).toHaveBeenCalledWith({
             content: 'You need to input a number between 1 and 99.',
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
     });
     it('Calling execute with int over 99 should fail', () => {
@@ -45,7 +46,7 @@ describe('Tests for prune command', () => {
         prune.execute(interaction);
         expect(interaction.reply).toHaveBeenCalledWith({
             content: 'You need to input a number between 1 and 99.',
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
     });
 });

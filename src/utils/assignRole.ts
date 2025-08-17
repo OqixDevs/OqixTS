@@ -1,5 +1,6 @@
 import { CommandInteraction, GuildMember } from 'discord.js';
 import { prisma } from '../model';
+import { logger } from '../logger';
 
 interface Dictionary<T> {
     [Key: string]: T;
@@ -26,7 +27,8 @@ export async function assignRole(
     bachelorThesisParsedUrl: URL
 ) {
     const today = new Date();
-    console.log('LOG: Assigning role to user.');
+    logger.info('Assigning role to user.');
+    logger.info('Checking study status of user...');
     if (
         scrapedConfirmationStudy[
             'Status of studies as of ' +
@@ -37,6 +39,7 @@ export async function assignRole(
                 today.getFullYear()
         ] === 'Studies in progress.'
     ) {
+        logger.info('Verifying user name in confirmation of study');
         if (
             scrapedConfirmationStudy.Name.replace('Bc. ', '')
                 .replace('Mgr. ', '')
@@ -53,12 +56,13 @@ export async function assignRole(
             );
             const member = interaction.member as GuildMember;
             try {
+                logger.info('Parsing thesis url');
                 let idThesis = bachelorThesisParsedUrl.pathname.split('/')[3];
                 if (idThesis === undefined) {
                     idThesis = bachelorThesisParsedUrl.pathname.split('/')[2];
                 }
-                console.log(
-                    `LOG: Creating user in database with thesis ${idThesis}.`
+                logger.info(
+                    `Creating user in database with thesis ${idThesis}.`
                 );
                 await prisma.users.create({
                     data: {
@@ -68,10 +72,10 @@ export async function assignRole(
                     },
                 });
             } catch (err) {
-                console.log(`Database error: ${err}`);
+                logger.error(`Database error: ${err}`);
                 return undefined;
             }
-            console.log(`LOG: Assigning role to user ${interaction.user.id}.`);
+            logger.info(`Assigning role to user ${interaction.user.id}.`);
             if (roleVerified && roleProgramm) {
                 member.roles.add(roleVerified);
                 member.roles.add(roleProgramm);

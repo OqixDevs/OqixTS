@@ -1,4 +1,9 @@
-import { ButtonInteraction, ActionRowBuilder, ButtonBuilder } from 'discord.js';
+import {
+    ButtonInteraction,
+    ActionRowBuilder,
+    ButtonBuilder,
+    MessageFlags,
+} from 'discord.js';
 import { channelSelect } from '../selects';
 
 /**
@@ -20,7 +25,7 @@ export async function execute(interaction: ButtonInteraction) {
     if (!subjectSelect) {
         interaction.reply({
             content: 'Could not find select with ID ' + groupId,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
@@ -28,6 +33,6 @@ export async function execute(interaction: ButtonInteraction) {
     interaction.reply({
         content: 'Select channels you want to add or remove below.',
         components: [...subjectSelect.data],
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
     });
 }

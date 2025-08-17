@@ -8,7 +8,7 @@ import {
 import { default as registerCommands } from './registerCommands';
 import dotenv from 'dotenv';
 import { SubjectChannels } from './utils';
-
+import { logger } from './logger';
 /**
  * Main function which is called when the bot is started.
  * Loads the environment variables, logs in the bot and registers all commands.
@@ -17,7 +17,7 @@ export default () => {
     dotenv.config();
     const token = process.env.DISCORD_TOKEN; // add your token here
 
-    console.log('Bot is starting...');
+    logger.info('Starting the bot...');
 
     const client = new Client({
         intents: [

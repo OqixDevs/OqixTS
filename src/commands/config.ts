@@ -5,6 +5,7 @@ import {
 import {
     ChatInputCommandInteraction,
     GuildMember,
+    MessageFlags,
     SlashCommandBuilder,
 } from 'discord.js';
 import { Config, ConfigKey, ConfigValue, Embed } from '../utils';
@@ -126,6 +127,6 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     interaction.reply({
         embeds: [embed],
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
     });
 }
