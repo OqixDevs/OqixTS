@@ -25,8 +25,11 @@ export async function scrapeThesis(bachelorThesisPath: string) {
     const $ = load(response.data);
     logger.info('Parsing author name from the page.');
     const authorName = $(
-        'ds-metadata-representation-list.ds-item-page-mixed-author-field:nth-child(4) > ds-metadata-field-wrapper:nth-child(1) > div:nth-child(1) > div:nth-child(2) > ds-metadata-representation-loader:nth-child(1) > ds-plain-text-metadata-list-element:nth-child(1) > div:nth-child(1) > span:nth-child(1)'
-    ).text();
+        'ds-metadata-representation-list.ds-item-page-mixed-author-field span.dont-break-out'
+    )
+        .first()
+        .text()
+        .trim();
     logger.info(`Parsed author name from the page ${authorName}.`);
     return authorName
         .split(',')
