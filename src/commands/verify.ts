@@ -75,8 +75,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         });
     }
     try {
-        let thesisId = bachelorThesisParsedUrl.pathname.split('/')[3];
-        if (thesisId === undefined) {
+        let thesisId = '';
+        if (bachelorThesisParsedUrl.hostname === 'dspace.vutbr.cz') {
+            thesisId = bachelorThesisParsedUrl.pathname.split('/')[3];
+        } else {
             thesisId = bachelorThesisParsedUrl.pathname.split('/')[2];
         }
         logger.info(`Checking if thesis ${thesisId} exists in database.`);
@@ -96,7 +98,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             content: 'This thesis is already used! Please contact admin.',
         });
     }
-    const authorName = await scrapeThesis(bachelorThesisParsedUrl.pathname);
+    const authorName = await scrapeThesis(bachelorThesisParsedUrl);
     if (!authorName) {
         return interaction.editReply({
             content:

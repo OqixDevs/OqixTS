@@ -40,6 +40,13 @@ export async function assignRole(
         ] === 'Studies in progress.'
     ) {
         logger.info('Verifying user name in confirmation of study');
+        logger.info(
+            scrapedConfirmationStudy.Name.replace('Bc. ', '')
+                .replace('Mgr. ', '')
+                .replace('Ing. ', '')
+                .trim()
+        );
+        logger.info(authorName.trim());
         if (
             scrapedConfirmationStudy.Name.replace('Bc. ', '')
                 .replace('Mgr. ', '')

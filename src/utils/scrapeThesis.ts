@@ -1,39 +1,36 @@
-import axios from 'axios';
-import { load } from 'cheerio';
 import { logger } from '../logger';
+import { ThesisInfo } from './ThesisInfo';
 /**
  * Scrapes name from the bachelor thesis.
  */
-export async function scrapeThesis(bachelorThesisPath: string) {
-    let response;
-    logger.info('Scraping author name from the thesis.');
-    try {
-        response = await axios.get(
-            'https://dspace.vutbr.cz' + bachelorThesisPath
-        );
-    } catch (e) {
-        logger.error(e);
-        try {
-            response = await axios.get(
-                'https://hdl.handle.net' + bachelorThesisPath
-            );
-        } catch (error) {
-            logger.error(error);
-            return null;
-        }
+export async function scrapeThesis(bachelorThesisLink: URL) {
+    if (!bachelorThesisLink) {
+        logger.error('Thesis link is empty');
+        return null;
     }
-    const $ = load(response.data);
-    logger.info('Parsing author name from the page.');
-    const authorName = $(
-        'ds-metadata-representation-list.ds-item-page-mixed-author-field span.dont-break-out'
-    )
-        .first()
-        .text()
-        .trim();
-    logger.info(`Parsed author name from the page ${authorName}.`);
-    return authorName
+    logger.info(`Scraping thesis from ${bachelorThesisLink.hostname}`);
+    let thesisUrl = '';
+
+    if (bachelorThesisLink.hostname === 'dspace.vut.cz') {
+        logger.info('Getting thesis from dspace.vut.cz');
+        const thesisPath = bachelorThesisLink.pathname;
+        thesisUrl = `https://dspace.vut.cz/server/api/core/${thesisPath}`;
+    } else if (bachelorThesisLink.hostname === 'hdl.handle.net') {
+        logger.info('Getting thesis from hdl.handle.net');
+        const thesisPath = bachelorThesisLink.pathname.substring(1); // Remove leading slash
+        thesisUrl = `https://dspace.vut.cz/server/api/pid/find?id=${thesisPath}`;
+    } else {
+        logger.error('Thesis link is not from dspace.vut.cz or hdl.handle.net');
+        return null;
+    }
+    logger.info(`Fetching thesis info from ${thesisUrl}`);
+    const response = await fetch(thesisUrl, { redirect: 'follow' });
+    const thesisInfo: ThesisInfo = await response.json();
+    const parsedName = thesisInfo.metadata['dc.contributor.author'][0].value
         .split(',')
         .reverse()
         .map((name) => name.trim())
         .join(' ');
+    logger.info(`Parsed name from thesis: ${parsedName}`);
+    return parsedName;
 }
