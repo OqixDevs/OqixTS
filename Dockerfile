@@ -1,4 +1,4 @@
-FROM arm64v8/node:22-slim
+FROM arm64v8/node:24-slim
 WORKDIR /root
 ENV PATH="/usr/local/bin:${PATH}"
 COPY . .
