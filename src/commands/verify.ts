@@ -76,10 +76,17 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     }
     let thesisId = '';
     try {
-        if (bachelorThesisParsedUrl.hostname === 'dspace.vut.cz') {
+        if (
+            bachelorThesisParsedUrl.hostname === 'dspace.vut.cz' ||
+            bachelorThesisParsedUrl.hostname === 'dspace.vutbr.cz'
+        ) {
             thesisId = bachelorThesisParsedUrl.pathname.split('/')[3];
-        } else {
+        } else if (bachelorThesisParsedUrl.hostname === 'hdl.handle.net') {
             thesisId = bachelorThesisParsedUrl.pathname.split('/')[2];
+        } else {
+            logger.error(
+                `Thesis link is not from dspace.vut.cz or hdl.handle.net ${bachelorThesisParsedUrl.hostname}`
+            );
         }
         logger.info(`Checking if thesis ${thesisId} exists in database.`);
         user = await prisma.users.findMany({

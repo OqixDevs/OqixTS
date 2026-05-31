@@ -142,9 +142,11 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         });
     }
     const additionalInfo = interaction.options.getString('additionalinfo');
-    let targetUser = undefined;
-    targetUser = await interaction.guild.members.fetch(userId);
-    if (targetUser === undefined) {
+    let targetUser: GuildMember;
+    try {
+        targetUser = await interaction.guild.members.fetch(userId);
+    } catch (err) {
+        logger.error(`Error fetching user with ID ${userId}: ${err}`);
         return interaction.editReply({
             content: 'User not found in the server. Please check the user ID.',
         });
@@ -200,7 +202,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             const emojiName = reaction.emoji.name;
             const totalVotes = reaction.count;
             const additionalVotes = totalVotes - initialCounts[emojiName!];
-            if (additionalVotes >= 1) {
+            if (additionalVotes >= 2) {
                 collector.stop();
                 if (emojiName === disagreeEmoji) {
                     return message.reply(
@@ -209,7 +211,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 }
                 if (
                     await checkUserVerificationStatus(
-                        interaction.user.id,
+                        targetUser.id,
                         interaction
                     )
                 ) {
@@ -218,11 +220,6 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
                 logger.info(
                     `Adding user to db user ${targetUser.id} with thesis ${bachelorThesisLink}.`
-                );
-                logger.info(
-                    targetUser.roles.cache.some(
-                        (role) => role.name === 'verified'
-                    )
                 );
                 if (
                     targetUser.roles.cache.some(

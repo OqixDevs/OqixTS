@@ -11,7 +11,10 @@ export async function scrapeThesis(bachelorThesisLink: URL) {
     logger.info(`Scraping thesis from ${bachelorThesisLink.hostname}`);
     let thesisUrl = '';
 
-    if (bachelorThesisLink.hostname === 'dspace.vut.cz') {
+    if (
+        bachelorThesisLink.hostname === 'dspace.vut.cz' ||
+        bachelorThesisLink.hostname === 'dspace.vutbr.cz'
+    ) {
         logger.info('Getting thesis from dspace.vut.cz');
         const thesisPath = bachelorThesisLink.pathname.substring(1); // Remove leading slash
         thesisUrl = `https://dspace.vut.cz/server/api/core/${thesisPath}`;
