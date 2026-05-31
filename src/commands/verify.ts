@@ -87,6 +87,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             logger.error(
                 `Thesis link is not from dspace.vut.cz or hdl.handle.net ${bachelorThesisParsedUrl.hostname}`
             );
+            return interaction.editReply({
+                content:
+                    'Thesis link is not from dspace.vut.cz or hdl.handle.net!',
+            });
         }
         logger.info(`Checking if thesis ${thesisId} exists in database.`);
         user = await prisma.users.findMany({

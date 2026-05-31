@@ -287,6 +287,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         }
         return;
     });
+    collector.on('end', (collected) => {
+        logger.info(
+            `Not enough votes were collected within the time limit. Total reactions: ${collected.size}`
+        );
+        return message.reply(
+            `Not enough votes were collected within the time limit. Verification process ended without a decision.`
+        );
+    });
     return interaction.editReply({
         content:
             'Manual verification process started. Waiting for votes from other admins.',

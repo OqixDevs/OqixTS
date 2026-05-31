@@ -30,6 +30,12 @@ export async function scrapeThesis(bachelorThesisLink: URL) {
     let parsedName = '';
     try {
         const response = await fetch(thesisUrl, { redirect: 'follow' });
+        if (!response.ok) {
+            logger.error(
+                `Failed to fetch thesis info: ${response.status} ${response.statusText}`
+            );
+            return null;
+        }
         const thesisInfo: ThesisInfo = await response.json();
         parsedName = thesisInfo.metadata['dc.contributor.author'][0].value
             .split(',')
