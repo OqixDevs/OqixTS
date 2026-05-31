@@ -21,9 +21,10 @@
 </p>
 
 ---
-OqixTS is a bot used in FIT@FI discord. This bot has following functionalinty:
+OqixTS is a bot used in FIT@FI discord. This bot has following functionality:
 
 - Verify users
+- Verify users by admin voting
 - Print out information how many credits you will receive for course recognition
 - Prune spam messages
 - Announce message
