@@ -22,3 +22,13 @@ jobs:
         uses: ./.github/actions/build
       - name: Lint project
         uses: ./.github/actions/lint
+  test-image-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Test build image
+        shell: bash
+        run: |
+          docker buildx create --name oqixBuilder --use
+          docker buildx build --platform linux/arm64 -t mimotej/oqix:$GITHUB_SHA -t mimotej/oqix:latest .
