@@ -74,8 +74,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 'User already verified! Contact admin if you need to verify again.',
         });
     }
+    let thesisId = '';
     try {
-        let thesisId = '';
         if (bachelorThesisParsedUrl.hostname === 'dspace.vutbr.cz') {
             thesisId = bachelorThesisParsedUrl.pathname.split('/')[3];
         } else {
@@ -111,7 +111,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (!scrapedConfirmationStudy) {
         return interaction.editReply({
             content:
-                'Could not get infromation from the confirmation of studies. Maybe confirmation of studies URL is wrong or the website did not respond.',
+                'Could not get information from the confirmation of studies. Maybe confirmation of studies URL is wrong or the website did not respond.',
         });
     }
 
@@ -131,9 +131,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     }
     const roleProgramm = await assignRole(
         interaction,
+        interaction.user.id,
         scrapedConfirmationStudy,
         authorName,
-        bachelorThesisParsedUrl
+        thesisId
     );
     if (roleProgramm) {
         return interaction.editReply({
@@ -144,7 +145,6 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         });
     }
     return interaction.editReply({
-        content:
-            'Verification failed check if you entered the correct information or contact admin.',
+        content: `Verification failed check if you entered the correct information or contact admin.`,
     });
 }
