@@ -4,7 +4,6 @@ import {
     Guild,
     GuildMember,
     Message,
-    MessageFlags,
     MessageReaction,
     Role,
     TextChannel,
@@ -93,7 +92,7 @@ const setupInteraction = () => {
 
 describe('Tests for verifyadmin command', () => {
     beforeEach(() => {
-        process.env.ALLOWED_CHANNELS = 'allowed-channel';
+        process.env.GUILD_ALLOWED_CHANNELS = 'allowed-channel';
         jest.clearAllMocks();
     });
 
@@ -103,7 +102,7 @@ describe('Tests for verifyadmin command', () => {
 
         await verifyadmin.execute(interaction);
 
-        expect(interaction.reply).toHaveBeenCalledWith({
+        expect(interaction.editReply).toHaveBeenCalledWith({
             content:
                 'This command cannot be used in this channel. Only #admin-chat is allowed',
         });
@@ -117,9 +116,8 @@ describe('Tests for verifyadmin command', () => {
 
         await verifyadmin.execute(interaction);
 
-        expect(interaction.reply).toHaveBeenCalledWith({
+        expect(interaction.editReply).toHaveBeenCalledWith({
             content: 'One of the arguments was not entered!',
-            flags: MessageFlags.Ephemeral,
         });
     });
 
@@ -137,9 +135,8 @@ describe('Tests for verifyadmin command', () => {
 
         await verifyadmin.execute(interaction);
 
-        expect(interaction.reply).toHaveBeenCalledWith({
+        expect(interaction.editReply).toHaveBeenCalledWith({
             content: 'User already verified!',
-            flags: MessageFlags.Ephemeral,
         });
     });
 
@@ -151,9 +148,8 @@ describe('Tests for verifyadmin command', () => {
 
         await verifyadmin.execute(interaction);
 
-        expect(interaction.reply).toHaveBeenCalledWith({
+        expect(interaction.editReply).toHaveBeenCalledWith({
             content: 'Verification failed! Database error.',
-            flags: MessageFlags.Ephemeral,
         });
     });
 
@@ -166,9 +162,8 @@ describe('Tests for verifyadmin command', () => {
 
         await verifyadmin.execute(interaction);
 
-        expect(interaction.reply).toHaveBeenCalledWith({
+        expect(interaction.editReply).toHaveBeenCalledWith({
             content: 'Channel not found.',
-            flags: MessageFlags.Ephemeral,
         });
     });
 
@@ -217,7 +212,7 @@ describe('Tests for verifyadmin command', () => {
             },
         });
         expect(message.reply).toHaveBeenCalledWith(
-            'User has been added to database and verified!'
+            'User has been added to database!'
         );
     });
 

@@ -73,7 +73,7 @@ export async function assignRole(
                 );
                 await prisma.users.create({
                     data: {
-                        discordId: interaction.user.id,
+                        discordId: userId,
                         idThesis: thesisId,
                         status: 'verified',
                     },

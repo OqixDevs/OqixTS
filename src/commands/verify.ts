@@ -76,7 +76,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     }
     let thesisId = '';
     try {
-        if (bachelorThesisParsedUrl.hostname === 'dspace.vutbr.cz') {
+        if (bachelorThesisParsedUrl.hostname === 'dspace.vut.cz') {
             thesisId = bachelorThesisParsedUrl.pathname.split('/')[3];
         } else {
             thesisId = bachelorThesisParsedUrl.pathname.split('/')[2];

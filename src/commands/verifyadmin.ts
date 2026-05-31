@@ -26,18 +26,16 @@ async function checkUserVerificationStatus(
             },
         });
         if (user.length != 0 && user[0].status !== 'removed') {
-            await interaction.reply({
+            await interaction.editReply({
                 content: 'User already verified!',
-                flags: MessageFlags.Ephemeral,
             });
             return true;
         }
         return false;
     } catch (err) {
         logger.error(`Database error: ${err}`);
-        await interaction.reply({
+        await interaction.editReply({
             content: 'Verification failed! Database error.',
-            flags: MessageFlags.Ephemeral,
         });
         return true;
     }
@@ -60,7 +58,7 @@ function createInfoContainer(
         .addSeparatorComponents((separator) => separator)
         .addTextDisplayComponents((textDisplay) =>
             textDisplay.setContent(
-                `MUNI confirmation link: ${linkToConfirmationMuni}\nBachelor thesis link: ${bachelorThesisLink}\nAdditional info: ${additionalInfo}`
+                `MUNI confirmation link: ${linkToConfirmationMuni}`
             )
         )
         .addSeparatorComponents((separator) => separator)
@@ -113,18 +111,20 @@ export const data = new SlashCommandBuilder()
         option
             .setName('username')
             .setDescription(
-                'Name of the user to verify (example Jan Novak), required if user is not verified manually'
+                'Name of the user to verify (example Jan Novák), required if user is not verified manually'
             )
     );
 
 export async function execute(interaction: ChatInputCommandInteraction) {
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
     const allowedChannels =
-        process.env.ALLOWED_CHANNELS?.split(',').map((id) => id.trim()) || [];
+        process.env.GUILD_ALLOWED_CHANNELS?.split(',').map((id) => id.trim()) ||
+        [];
     if (!interaction.guild) {
         return;
     }
     if (!allowedChannels.includes(interaction.channelId)) {
-        return interaction.reply({
+        return interaction.editReply({
             content:
                 'This command cannot be used in this channel. Only #admin-chat is allowed',
         });
@@ -137,15 +137,18 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         interaction.options.getString('bachelorthesislink');
     const userId = interaction.options.getString('userid');
     if (!linkToConfirmationMuni || !bachelorThesisLink || !userId) {
-        return interaction.reply({
+        return interaction.editReply({
             content: 'One of the arguments was not entered!',
-            flags: MessageFlags.Ephemeral,
         });
     }
     const additionalInfo = interaction.options.getString('additionalinfo');
-
-    const targetUser = await interaction.guild.members.fetch(userId);
-
+    let targetUser = undefined;
+    targetUser = await interaction.guild.members.fetch(userId);
+    if (targetUser === undefined) {
+        return interaction.editReply({
+            content: 'User not found in the server. Please check the user ID.',
+        });
+    }
     const verifyContainer = createInfoContainer(
         interaction,
         targetUser,
@@ -154,15 +157,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         additionalInfo
     );
 
-    if (await checkUserVerificationStatus(interaction.user.id, interaction)) {
+    if (await checkUserVerificationStatus(userId, interaction)) {
         return;
     }
 
     const channel = interaction.channel as TextChannel;
     if (!channel) {
-        return interaction.reply({
+        return interaction.editReply({
             content: 'Channel not found.',
-            flags: MessageFlags.Ephemeral,
         });
     }
     const message = await channel.send({
@@ -198,7 +200,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             const emojiName = reaction.emoji.name;
             const totalVotes = reaction.count;
             const additionalVotes = totalVotes - initialCounts[emojiName!];
-            if (additionalVotes >= 2) {
+            if (additionalVotes >= 1) {
                 collector.stop();
                 if (emojiName === disagreeEmoji) {
                     return message.reply(
@@ -216,6 +218,11 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
                 logger.info(
                     `Adding user to db user ${targetUser.id} with thesis ${bachelorThesisLink}.`
+                );
+                logger.info(
+                    targetUser.roles.cache.some(
+                        (role) => role.name === 'verified'
+                    )
                 );
                 if (
                     targetUser.roles.cache.some(
@@ -239,6 +246,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                             'Creating user in database failed!'
                         );
                     }
+                    return message.reply('User has been added to database!');
                 } else {
                     const userName = interaction.options.getString('username');
                     if (!userName) {
@@ -270,10 +278,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     logger.info(
                         `Assigned role ${roleProgramm?.name} to user ${targetUser.id}.`
                     );
+                    return message.reply(
+                        'User has been added to database and verified!'
+                    );
                 }
-                return message.reply(
-                    'User has been added to database and verified!'
-                );
             }
         } catch (error) {
             return message.reply(
@@ -282,9 +290,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         }
         return;
     });
-    return interaction.reply({
+    return interaction.editReply({
         content:
             'Manual verification process started. Waiting for votes from other admins.',
-        flags: MessageFlags.Ephemeral,
     });
 }

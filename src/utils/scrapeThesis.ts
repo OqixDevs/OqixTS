@@ -13,7 +13,7 @@ export async function scrapeThesis(bachelorThesisLink: URL) {
 
     if (bachelorThesisLink.hostname === 'dspace.vut.cz') {
         logger.info('Getting thesis from dspace.vut.cz');
-        const thesisPath = bachelorThesisLink.pathname;
+        const thesisPath = bachelorThesisLink.pathname.substring(1); // Remove leading slash
         thesisUrl = `https://dspace.vut.cz/server/api/core/${thesisPath}`;
     } else if (bachelorThesisLink.hostname === 'hdl.handle.net') {
         logger.info('Getting thesis from hdl.handle.net');
@@ -24,13 +24,19 @@ export async function scrapeThesis(bachelorThesisLink: URL) {
         return null;
     }
     logger.info(`Fetching thesis info from ${thesisUrl}`);
-    const response = await fetch(thesisUrl, { redirect: 'follow' });
-    const thesisInfo: ThesisInfo = await response.json();
-    const parsedName = thesisInfo.metadata['dc.contributor.author'][0].value
-        .split(',')
-        .reverse()
-        .map((name) => name.trim())
-        .join(' ');
+    let parsedName = '';
+    try {
+        const response = await fetch(thesisUrl, { redirect: 'follow' });
+        const thesisInfo: ThesisInfo = await response.json();
+        parsedName = thesisInfo.metadata['dc.contributor.author'][0].value
+            .split(',')
+            .reverse()
+            .map((name) => name.trim())
+            .join(' ');
+    } catch (e) {
+        logger.error(`Error fetching thesis info: ${e}`);
+        return null;
+    }
     logger.info(`Parsed name from thesis: ${parsedName}`);
     return parsedName;
 }
