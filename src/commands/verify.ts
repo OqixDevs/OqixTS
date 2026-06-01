@@ -74,10 +74,23 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 'User already verified! Contact admin if you need to verify again.',
         });
     }
+    let thesisId = '';
     try {
-        let thesisId = bachelorThesisParsedUrl.pathname.split('/')[3];
-        if (thesisId === undefined) {
+        if (
+            bachelorThesisParsedUrl.hostname === 'dspace.vut.cz' ||
+            bachelorThesisParsedUrl.hostname === 'dspace.vutbr.cz'
+        ) {
+            thesisId = bachelorThesisParsedUrl.pathname.split('/')[3];
+        } else if (bachelorThesisParsedUrl.hostname === 'hdl.handle.net') {
             thesisId = bachelorThesisParsedUrl.pathname.split('/')[2];
+        } else {
+            logger.error(
+                `Thesis link is not from dspace.vut.cz or hdl.handle.net ${bachelorThesisParsedUrl.hostname}`
+            );
+            return interaction.editReply({
+                content:
+                    'Thesis link is not from dspace.vut.cz or hdl.handle.net!',
+            });
         }
         logger.info(`Checking if thesis ${thesisId} exists in database.`);
         user = await prisma.users.findMany({
@@ -96,7 +109,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             content: 'This thesis is already used! Please contact admin.',
         });
     }
-    const authorName = await scrapeThesis(bachelorThesisParsedUrl.pathname);
+    const authorName = await scrapeThesis(bachelorThesisParsedUrl);
     if (!authorName) {
         return interaction.editReply({
             content:
@@ -109,7 +122,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (!scrapedConfirmationStudy) {
         return interaction.editReply({
             content:
-                'Could not get infromation from the confirmation of studies. Maybe confirmation of studies URL is wrong or the website did not respond.',
+                'Could not get information from the confirmation of studies. Maybe confirmation of studies URL is wrong or the website did not respond.',
         });
     }
 
@@ -129,9 +142,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     }
     const roleProgramm = await assignRole(
         interaction,
+        interaction.user.id,
         scrapedConfirmationStudy,
         authorName,
-        bachelorThesisParsedUrl
+        thesisId
     );
     if (roleProgramm) {
         return interaction.editReply({
@@ -142,7 +156,6 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         });
     }
     return interaction.editReply({
-        content:
-            'Verification failed check if you entered the correct information or contact admin.',
+        content: `Verification failed check if you entered the correct information or contact admin.`,
     });
 }

@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Install dependencies
         uses: ./.github/actions/build
       - name: Test
@@ -25,7 +25,7 @@ jobs:
     needs: pre-run
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Prepare image
         uses: ./.github/actions/prepare-image
         with:
@@ -38,7 +38,7 @@ jobs:
     needs: setup-image
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Deploy app
         uses: ./.github/actions/deploy-app
         with:
@@ -48,6 +48,7 @@ jobs:
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
           GUILD_ID: ${{ secrets.GUILD_ID }}
+          GUILD_ALLOWED_CHANNELS: ${{ secrets.GUILD_ALLOWED_CHANNELS }}
           SSH_KEY: ${{ secrets.SSH_KEY }}
           KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
           DATABASE_CONNECTION_STRING: ${{ secrets.DATABASE_CONNECTION_STRING }}

@@ -1,4 +1,4 @@
-import { CommandInteraction, GuildMember } from 'discord.js';
+import { CommandInteraction } from 'discord.js';
 import { prisma } from '../model';
 import { logger } from '../logger';
 
@@ -22,11 +22,17 @@ const programme_roles: { [key: string]: string } = {
 
 export async function assignRole(
     interaction: CommandInteraction,
+    userId: string,
     scrapedConfirmationStudy: Dictionary<string>,
     authorName: string,
-    bachelorThesisParsedUrl: URL
+    thesisId: string
 ) {
     const today = new Date();
+    const member = interaction.guild?.members.cache.get(userId);
+    if (!member) {
+        logger.error(`User with ID ${userId} not found in guild.`);
+        return undefined;
+    }
     logger.info('Assigning role to user.');
     logger.info('Checking study status of user...');
     if (
@@ -54,20 +60,14 @@ export async function assignRole(
                     role.name ===
                     programme_roles[scrapedConfirmationStudy['Programme']]
             );
-            const member = interaction.member as GuildMember;
             try {
-                logger.info('Parsing thesis url');
-                let idThesis = bachelorThesisParsedUrl.pathname.split('/')[3];
-                if (idThesis === undefined) {
-                    idThesis = bachelorThesisParsedUrl.pathname.split('/')[2];
-                }
                 logger.info(
-                    `Creating user in database with thesis ${idThesis}.`
+                    `Creating user in database with thesis ${thesisId}.`
                 );
                 await prisma.users.create({
                     data: {
-                        discordId: interaction.user.id,
-                        idThesis: idThesis,
+                        discordId: userId,
+                        idThesis: thesisId,
                         status: 'verified',
                     },
                 });

@@ -29,7 +29,7 @@ export default () => {
         ],
     });
     client.login(token);
-    client.once('ready', () => {
+    client.once('clientReady', () => {
         registerCommands();
         client.user?.setActivity(`/verify`, { type: 2 });
         for (const guild of client.guilds.cache) {

@@ -6,6 +6,7 @@ export * as prune from './prune';
 export * as announce from './announce';
 export * as restart from './restart';
 export * as verify from './verify';
+export * as verifyadmin from './verifyadmin';
 export * as config from './config';
 export * as channelmanagement from './channelmanagement';
 export * as edit from './edit';
