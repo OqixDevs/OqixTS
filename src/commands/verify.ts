@@ -80,7 +80,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             bachelorThesisParsedUrl.hostname === 'dspace.vut.cz' ||
             bachelorThesisParsedUrl.hostname === 'dspace.vutbr.cz'
         ) {
-            thesisId = bachelorThesisParsedUrl.pathname.split('/')[3];
+            thesisId = bachelorThesisParsedUrl.pathname.split('/')[2];
         } else if (bachelorThesisParsedUrl.hostname === 'hdl.handle.net') {
             thesisId = bachelorThesisParsedUrl.pathname.split('/')[2];
         } else {
