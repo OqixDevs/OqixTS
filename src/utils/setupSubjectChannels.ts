@@ -139,7 +139,12 @@ export class SubjectChannels {
                 ++channelIndex;
             }
 
-            this.setupPlaceholder(selectRow, channelIndex % maxItemIndex);
+            this.setupPlaceholder(
+                selectRow,
+                channelIndex % maxItemIndex === 0
+                    ? maxItemIndex
+                    : channelIndex % maxItemIndex
+            );
         }
     }
 }
