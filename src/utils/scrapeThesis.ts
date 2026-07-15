@@ -1,5 +1,37 @@
 import { logger } from '../logger';
 import { ThesisInfo } from './ThesisInfo';
+
+const DSPACE_HOSTS = ['dspace.vutbr.cz', 'dspace.vut.cz'];
+
+function buildThesisApiUrl(bachelorThesisLink: URL) {
+    const pathname = bachelorThesisLink.pathname.replace(/^\/+/, '');
+
+    if (bachelorThesisLink.hostname === 'hdl.handle.net') {
+        logger.info('Getting thesis from hdl.handle.net');
+        return `https://${DSPACE_HOSTS[0]}/server/api/pid/find?id=${pathname}`;
+    }
+
+    if (!DSPACE_HOSTS.includes(bachelorThesisLink.hostname)) {
+        logger.error(
+            'Thesis link is not from a supported DSpace or handle URL'
+        );
+        return null;
+    }
+
+    if (pathname.startsWith('handle/')) {
+        logger.info('Getting thesis from DSpace handle URL');
+        return `https://${DSPACE_HOSTS[0]}/server/api/pid/find?id=${pathname.replace('handle/', '')}`;
+    }
+
+    if (pathname.startsWith('items/')) {
+        logger.info('Getting thesis from DSpace item URL');
+        return `https://${DSPACE_HOSTS[0]}/server/api/core/${pathname}`;
+    }
+
+    logger.error('Thesis link is not from a supported DSpace or handle URL');
+    return null;
+}
+
 /**
  * Scrapes name from the bachelor thesis.
  */
@@ -9,23 +41,12 @@ export async function scrapeThesis(bachelorThesisLink: URL) {
         return null;
     }
     logger.info(`Scraping thesis from ${bachelorThesisLink.hostname}`);
-    let thesisUrl = '';
 
-    if (
-        bachelorThesisLink.hostname === 'dspace.vut.cz' ||
-        bachelorThesisLink.hostname === 'dspace.vutbr.cz'
-    ) {
-        logger.info('Getting thesis from dspace.vut.cz');
-        const thesisPath = bachelorThesisLink.pathname.substring(1); // Remove leading slash
-        thesisUrl = `https://dspace.vut.cz/server/api/core/${thesisPath}`;
-    } else if (bachelorThesisLink.hostname === 'hdl.handle.net') {
-        logger.info('Getting thesis from hdl.handle.net');
-        const thesisPath = bachelorThesisLink.pathname.substring(1); // Remove leading slash
-        thesisUrl = `https://dspace.vut.cz/server/api/pid/find?id=${thesisPath}`;
-    } else {
-        logger.error('Thesis link is not from dspace.vut.cz or hdl.handle.net');
+    const thesisUrl = buildThesisApiUrl(bachelorThesisLink);
+    if (!thesisUrl) {
         return null;
     }
+
     logger.info(`Fetching thesis info from ${thesisUrl}`);
     let parsedName = '';
     try {
@@ -37,7 +58,12 @@ export async function scrapeThesis(bachelorThesisLink: URL) {
             return null;
         }
         const thesisInfo: ThesisInfo = await response.json();
-        parsedName = thesisInfo.metadata['dc.contributor.author'][0].value
+        const authorMetadata = thesisInfo.metadata['dc.contributor.author'];
+        if (!authorMetadata?.length) {
+            logger.error('No author metadata found in thesis response');
+            return null;
+        }
+        parsedName = authorMetadata[0].value
             .split(',')
             .reverse()
             .map((name) => name.trim())
