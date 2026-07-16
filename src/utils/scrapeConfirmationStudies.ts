@@ -56,13 +56,15 @@ export async function scrapeConfirmationStudies(pathname: string) {
 /**
  * Extracts the __Host-issession cookie value from set-cookie headers.
  */
+const SESSION_COOKIE_RE = /^(__Host-issession=[^;]+)/;
+
 function extractSessionCookie(
     setCookie: string | string[] | undefined
 ): string | null {
     if (!setCookie) return null;
     const cookies = Array.isArray(setCookie) ? setCookie : [setCookie];
     for (const cookie of cookies) {
-        const match = cookie.match(/^(__Host-issession=[^;]+)/);
+        const match = SESSION_COOKIE_RE.exec(cookie);
         if (match) return match[1];
     }
     return null;
