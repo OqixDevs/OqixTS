@@ -76,13 +76,24 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     }
     let thesisId = '';
     try {
-        if (
-            bachelorThesisParsedUrl.hostname === 'dspace.vut.cz' ||
-            bachelorThesisParsedUrl.hostname === 'dspace.vutbr.cz'
-        ) {
-            thesisId = bachelorThesisParsedUrl.pathname.split('/')[2];
-        } else if (bachelorThesisParsedUrl.hostname === 'hdl.handle.net') {
-            thesisId = bachelorThesisParsedUrl.pathname.split('/')[2];
+        const hostname = bachelorThesisParsedUrl.hostname;
+        const pathname = bachelorThesisParsedUrl.pathname;
+        if (hostname === 'dspace.vut.cz' || hostname === 'dspace.vutbr.cz') {
+            if (pathname.startsWith('/items/')) {
+                // items URL: /items/{uuid}
+                thesisId = pathname.split('/')[2];
+            } else if (pathname.startsWith('/handle/')) {
+                // handle URL: /handle/{prefix}/{suffix}
+                thesisId = pathname.split('/').slice(2).join('/');
+            } else {
+                logger.error(`Unrecognized thesis link path: ${pathname}`);
+                return interaction.editReply({
+                    content: 'Thesis link format not recognized!',
+                });
+            }
+        } else if (hostname === 'hdl.handle.net') {
+            // hdl.handle.net/{prefix}/{suffix}
+            thesisId = pathname.split('/').slice(1).join('/');
         } else {
             logger.error(
                 `Thesis link is not from dspace.vut.cz or hdl.handle.net ${bachelorThesisParsedUrl.hostname}`

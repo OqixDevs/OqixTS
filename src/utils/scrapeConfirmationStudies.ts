@@ -2,20 +2,34 @@ import axios from 'axios';
 import { load } from 'cheerio';
 import { logger } from '../logger';
 
-/**
- * Scrapes the confirmation studies from the given path.
- */
 export async function scrapeConfirmationStudies(pathname: string) {
-    let response;
+    const url = 'https://is.muni.cz' + pathname + '?lang=en';
     logger.info('Scraping confirmation of studies.');
+
+    let sessionCookie: string | null = null;
     try {
-        response = await axios.get(
-            'https://is.muni.cz' + pathname + '?lang=en'
+        const initialResponse = await axios.get(url, {
+            maxRedirects: 0,
+            validateStatus: (status) => status < 400,
+        });
+        sessionCookie = extractSessionCookie(
+            initialResponse.headers['set-cookie']
         );
     } catch (e) {
-        console.debug(e);
+        logger.error(`Error getting session cookie: ${e}`);
         return null;
     }
+
+    let response;
+    try {
+        response = await axios.get(url, {
+            headers: sessionCookie ? { Cookie: sessionCookie } : {},
+        });
+    } catch (e) {
+        logger.error(`Error fetching confirmation page: ${e}`);
+        return null;
+    }
+
     const $ = load(response.data);
     logger.info('Extracting user information from the confirmation page.');
     const userInfo = $(
@@ -37,4 +51,21 @@ export async function scrapeConfirmationStudies(pathname: string) {
     });
     const mappedData = Object.fromEntries(splitted);
     return mappedData;
+}
+
+/**
+ * Extracts the __Host-issession cookie value from set-cookie headers.
+ */
+const SESSION_COOKIE_RE = /^(__Host-issession=[^;]+)/;
+
+function extractSessionCookie(
+    setCookie: string | string[] | undefined
+): string | null {
+    if (!setCookie) return null;
+    const cookies = Array.isArray(setCookie) ? setCookie : [setCookie];
+    for (const cookie of cookies) {
+        const match = SESSION_COOKIE_RE.exec(cookie);
+        if (match) return match[1];
+    }
+    return null;
 }
