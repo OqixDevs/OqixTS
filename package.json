@@ -46,7 +46,7 @@
     "@types/node": "24.13.1",
     "@typescript-eslint/eslint-plugin": "8.60.0",
     "@typescript-eslint/parser": "8.60.0",
-    "axios": "1.17.0",
+    "axios": "1.18.0",
     "cheerio": "1.2.0",
     "eslint": "^9.34.4",
     "jest": "30.4.2",
