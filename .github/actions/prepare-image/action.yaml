@@ -3,7 +3,7 @@ description: Builds image and pushes it to dockerhub
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6.1.0
     - name: docker login
       env:
         DOCKER_USERNAME: ${{ inputs.DOCKER_USERNAME }}
